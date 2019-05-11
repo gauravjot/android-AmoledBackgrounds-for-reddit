@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false">
+
+    <RelativeLayout
+        android:id="@+id/optionBar"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="?android:attr/windowBackground">
+
+        <RelativeLayout
+            android:id="@+id/relative_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textAlignment="center">
+
+            <TextView
+                android:id="@+id/text43121"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/button_reload"
+                android:text="Unable to connect." />
+
+            <Button
+                android:id="@+id/button_reload"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/design_red_background_radius"
+                android:text="Try Again" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/relative23145"
+            android:padding="8dp" />
+
+        <RelativeLayout
+            android:id="@+id/relative23145"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/design_grey_background_radius">
+
+            <Spinner
+                android:id="@+id/options_spinner"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/optionBar"
+        android:clipToPadding="false"
+        android:horizontalSpacing="16dp"
+        android:numColumns="2"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="16dp"
+        android:scrollbarStyle="outsideOverlay"
+        android:verticalSpacing="24dp" />
+
+</RelativeLayout>

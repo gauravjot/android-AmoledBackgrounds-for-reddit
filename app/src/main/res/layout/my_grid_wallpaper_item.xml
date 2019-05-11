@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@color/colorBackground">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textAuthor"
+            android:text="Posted by: u/Gavinax"
+            android:layout_alignParentBottom="true"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="8dp"
+            android:textColor="#55ffffff"
+            android:maxLines="2"
+            android:ellipsize="marquee"/>
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_above="@+id/textAuthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:paddingTop="8dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:text="asdfasdsadasdasdas sadasd asd asdasd asd asdas dasdasdas"
+            android:ellipsize="marquee"
+            android:textColor="@android:color/white"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/textView"
+            android:background="@drawable/design_card_background">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:layout_margin="1dp"
+            android:id="@+id/preview"
+            />
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_arrow_upward_black_24dp"
+                android:layout_alignParentBottom="true"
+                android:padding="6dp"
+                android:layout_marginStart="4dp"
+                android:id="@+id/imageView1213"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/design_black_opaque_background_radius"/>
+
+            <TextView
+                android:id="@+id/score"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_alignTop="@+id/imageView1213"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_toEndOf="@id/imageView1213"
+                android:background="@drawable/design_black_opaque_background_radius"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="4dp"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:text="1.1k"
+                android:textColor="@android:color/white" />
+
+            <ImageView
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:src="@drawable/ic_comment_black_24dp"
+                android:layout_alignParentBottom="true"
+                android:padding="6dp"
+                android:layout_marginStart="4dp"
+                android:id="@+id/imageView12135"
+                android:layout_toEndOf="@+id/score"
+                android:tint="@android:color/white"
+                android:layout_marginBottom="5dp"
+                android:background="@drawable/design_black_opaque_background_radius"/>
+
+            <TextView
+                android:id="@+id/comments"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:layout_alignTop="@+id/imageView1213"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="5dp"
+                android:layout_toEndOf="@id/imageView12135"
+                android:background="@drawable/design_black_opaque_background_radius"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="4dp"
+                android:textSize="14sp"
+                android:textAlignment="center"
+                android:text="1.1k"
+                android:textColor="@android:color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Featured"
+                android:textAllCaps="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:background="@drawable/design_oc"
+                android:layout_margin="6dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textColor="@android:color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:id="@+id/post_flair"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1080x1920"
+                android:textColor="#99ffffff"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                android:background="@drawable/resolution_border"
+                android:layout_alignParentStart="true"
+                android:layout_above="@+id/score"
+                android:layout_margin="6dp"
+                android:id="@+id/resolution"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>

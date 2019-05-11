@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item android:id="@+id/action_search"
+        android:title="@string/search"
+        android:icon="@drawable/ic_search_white_24dp"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="android.support.v7.widget.SearchView" />
+
+    <item
+        android:title="@string/share"
+        android:id="@+id/action_share"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/rate_our_app_5"
+        android:id="@+id/action_rate"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/r_amoledbackgrounds"
+        android:id="@+id/action_subreddit"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="@string/changelog"
+        android:id="@+id/action_changelog"
+        app:showAsAction="never"/>
+    <item
+        android:title="@string/privacy_policy"
+        android:id="@+id/privacy_policy"
+        app:showAsAction="never"/>
+
+</menu>

@@ -1,0 +1,54 @@
+<resources>
+
+
+    <string name="changelog_message">
+        New features added to app:\n
+        ☑ You can now search wallpapers in whole r/AmoledBackgrounds\n
+        ☑ We have added ability to read comments to a post. Simply click on "View Comments"
+            or click post name on the download page\n
+        ☑ Application name is changed from "r/AmoledBackgrounds" to "AmoledBackgrounds", so
+            it will be easier to find app in app drawer\n
+        ☑ There are new options in options menu\n
+        \n
+        Other updates:\n
+        ☑ We have added animations to smoothen the experience\n
+        ☑ Removed a bug with fullscreen wallpaper on download page\n
+        ☑ Added comment count on main page now\n
+        \n
+        Future Updates:\n
+        ☐ Ability to auto-set the wallpaper daily or weekly\n
+        \n
+        Don\'t forget to rate us 5⭐ on play store!
+    </string>
+
+
+    <string name="app_name">AmoledBackgrounds</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string-array name="options_array">
+        <item>Hot</item>
+        <item>New</item>
+        <item>Top 24h</item>
+        <item>Top Week</item>
+        <item>Top Month</item>
+        <item>Top Year</item>
+        <item>Top All</item>
+    </string-array>
+
+    <string name="title_activity_download">DownloadActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="fullscreen_preview">fullscreen preview</string>
+    <string name="reddit">reddit</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="search">Search</string>
+    <string name="thread">thread</string>
+
+    <string name="changelog">Changelog</string>
+    <string name="r_amoledbackgrounds">r/AmoledBackgrounds</string>
+    <string name="play_store_url">https://play.google.com/store/apps/details?id=com.droidheat.amoledbackgrounds</string>
+    <string name="preference_file_key">key1</string>
+    <string name="share">Share with Friends</string>
+    <string name="rate_our_app_5">Rate Our App 5⭐</string>
+</resources>

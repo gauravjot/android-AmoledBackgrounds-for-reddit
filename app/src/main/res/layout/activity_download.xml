@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000"
+    tools:context=".DownloadActivity"
+    android:animateLayoutChanges="true">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:id="@+id/fullscreen_content">
+
+        <ImageView
+            android:id="@+id/fullscreen_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:contentDescription="@string/fullscreen_preview" />
+    </RelativeLayout>
+
+    <!-- This FrameLayout insets its children based on system windows using
+         android:fitsSystemWindows. -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
+        <RelativeLayout
+            android:id="@+id/fullscreen_content_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            tools:ignore="UselessParent">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="76dp"
+                android:id="@+id/relative_options">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1080x1920"
+                    android:textColor="#bbffffff"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/resolution_border"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="16dp"
+                    android:id="@+id/resolution"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Featured"
+                    android:textAllCaps="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_toEndOf="@+id/resolution"
+                    android:background="@drawable/design_oc"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="64dp"
+                    android:maxLines="1"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:id="@+id/post_flair"
+                    />
+
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/ic_arrow_upward_black_24dp"
+                    android:layout_alignParentBottom="true"
+                    android:padding="4dp"
+                    android:layout_marginStart="16dp"
+                    android:id="@+id/imageView1213"
+                    android:tint="@android:color/white"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/design_black_opaque_background_radius"/>
+
+                <TextView
+                    android:id="@+id/score"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_alignTop="@+id/imageView1213"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toEndOf="@id/imageView1213"
+                    android:background="@drawable/design_black_opaque_background_radius"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="4dp"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:text="1.1k"
+                    android:textColor="@android:color/white" />
+
+                <ImageView
+                    android:layout_width="26dp"
+                    android:layout_height="26dp"
+                    android:src="@drawable/ic_comment_black_24dp"
+                    android:layout_alignParentBottom="true"
+                    android:padding="4dp"
+                    android:layout_marginStart="16dp"
+                    android:id="@+id/imageView1908"
+                    android:tint="@android:color/white"
+                    android:layout_marginBottom="5dp"
+                    android:background="@drawable/design_black_opaque_background_radius"
+                    android:layout_toEndOf="@+id/score"/>
+
+                <TextView
+                    android:id="@+id/comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_alignTop="@+id/imageView1213"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toEndOf="@id/imageView1908"
+                    android:background="@drawable/design_black_opaque_background_radius"
+                    android:paddingStart="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingTop="4dp"
+                    android:textSize="14sp"
+                    android:textAlignment="center"
+                    android:text="1.1k"
+                    android:textColor="@android:color/white" />
+
+
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/design_float"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"/>
+                <ImageSwitcher
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_file_download_black_24dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:id="@+id/download"
+                    android:tint="@android:color/white"
+                    android:padding="12dp"/>
+
+                <ProgressBar
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:indeterminateTint="@android:color/white"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="24dp"
+                    android:padding="8dp"
+                    android:id="@+id/progress_circular"
+                    android:layout_alignParentEnd="true"/>
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name of the image but it can be very big so I have to set max lines jsut to fit this all into this setion"
+                android:paddingTop="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:id="@+id/title"
+                android:layout_below="@+id/relative_options"
+                android:layout_alignParentStart="true"
+                android:textAlignment="textStart"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:text="u/Gavinax"
+                android:maxLines="1"
+                android:layout_marginStart="16dp"
+                android:id="@+id/author"
+                android:textSize="16sp"
+                android:layout_marginBottom="16dp"/>
+
+            <TextView
+                android:id="@+id/user_flair"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sample flair"
+                android:maxLines="1"
+                android:background="@drawable/design_user_flair"
+                android:layout_toEndOf="@+id/author"
+                android:layout_below="@+id/title"
+                android:layout_marginStart="8dp"
+                android:paddingTop="1dp"
+                android:paddingBottom="1dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:textAllCaps="true"
+                android:layout_marginTop="2dp"
+                android:textSize="12sp"
+                android:layout_marginEnd="80dp"/>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:id="@+id/open_reddit"
+                android:layout_below="@+id/title"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="-12dp">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="26dp"
+                    android:layout_centerVertical="true"
+                    android:background="@drawable/design_grey_background_radius">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/thread"
+                        android:textColor="@android:color/white"
+                        android:layout_centerVertical="true"
+                        android:id="@+id/text20923"
+                        android:textSize="14sp"
+                        android:paddingStart="8dp"
+                        android:paddingEnd="3dp"/>
+
+                    <ImageView
+                        android:layout_width="26dp"
+                        android:layout_height="26dp"
+                        android:src="@drawable/ic_launch_black_24dp"
+                        android:tint="@android:color/white"
+                        android:layout_toEndOf="@+id/text20923"
+                        android:padding="5dp"/>
+                </RelativeLayout>
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"
+            android:id="@+id/commentsView"
+            app:cardBackgroundColor="#e9000000">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+                <WebView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/webView"
+                    android:layout_weight="1"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="#99555555">
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="CLOSE"
+                        android:id="@+id/button_Close"
+                        android:layout_alignParentEnd="true"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_centerVertical="true"/>
+
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="   Go to Thread"
+                        android:id="@+id/button_browser"
+                        android:layout_alignParentStart="true"
+                        android:background="?android:attr/selectableItemBackgroundBorderless"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_centerVertical="true"
+                        android:drawableLeft="@drawable/ic_launch_black_24dp"
+                        android:drawableTint="@android:color/white"
+                        />
+
+                </RelativeLayout>
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+    </FrameLayout>
+
+</FrameLayout>

@@ -19,8 +19,8 @@
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingBottom="8dp"
-            android:textColor="#55ffffff"
-            android:maxLines="2"
+            android:textColor="#77ffffff"
+            android:maxLines="3"
             android:ellipsize="marquee"/>
 
         <TextView
@@ -136,7 +136,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1080x1920"
-                android:textColor="#99ffffff"
+                android:textColor="#ddffffff"
                 android:textSize="12sp"
                 android:textStyle="bold"
                 android:background="@drawable/resolution_border"

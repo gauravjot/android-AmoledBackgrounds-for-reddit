@@ -44,8 +44,20 @@ public class UtilsJSON {
                             !flair.toUpperCase().contains("PSA")
                       ) {
                         hashMap.put("image",mURl);
+                        try {
+                            int len = dataObject.getJSONObject("preview")
+                                    .getJSONArray("images").getJSONObject(0)
+                                    .getJSONArray("resolutions").length();
+                            JSONObject previewObject = dataObject.getJSONObject("preview")
+                                    .getJSONArray("images").getJSONObject(0)
+                                    .getJSONArray("resolutions").getJSONObject(len - 2);
+                            hashMap.put("preview",previewObject.getString("url").replaceAll("&amp;","&"));
+                        } catch (Exception e) {
+                            hashMap.put("preview",dataObject.getString("url"));
+                            e.printStackTrace();}
                         hashMap.put("flair",flair);
                         hashMap.put("title",dataObject.getString("title"));
+                        hashMap.put("created_utc",dataObject.getLong("created_utc")+"");
                         hashMap.put("name",dataObject.getString("name"));
                         hashMap.put("domain",dataObject.getString("domain"));
                         hashMap.put("score",dataObject.getString("score"));
@@ -70,7 +82,7 @@ public class UtilsJSON {
                 arrayList.add(metadata);
             }
         }
-        catch (Exception ignored) {}
+        catch (Exception e) { e.printStackTrace();}
 
         return arrayList;
     }

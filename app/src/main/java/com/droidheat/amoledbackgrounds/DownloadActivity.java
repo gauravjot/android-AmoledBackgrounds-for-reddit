@@ -123,7 +123,7 @@ public class DownloadActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progress_circular);
         progressBar.setVisibility(View.INVISIBLE);
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setCancelable(true);
         alertDialogBuilder.setMessage("Downloading");
         alertDialog = alertDialogBuilder.create();
 
@@ -209,7 +209,7 @@ public class DownloadActivity extends AppCompatActivity {
         titleStr = titleStr.replaceAll(" ", "_") + "_" + wallpaper.get("name");
         titleStr = titleStr.substring(0, Math.min(titleStr.length(), 50));
         titleStr = (new AppUtils()).validFileNameConvert(titleStr);
-        title.setText(post_title);
+        title.setText(post_title.replaceAll("-","").replaceAll("&amp;", "&").trim());
         author.setText(String.format("u/%s", wallpaper.get("author")));
         if (!Objects.equals(wallpaper.get("flair"), "null")) {
             post_flair.setText(wallpaper.get("flair"));
@@ -530,14 +530,15 @@ public class DownloadActivity extends AppCompatActivity {
                         "        body {\n" +
                         "            font-family: sans-serif; font-size:15px;\n" +
                         "            word-wrap: break-word;\n" +
-                        "            color: #fff;\n" +
+                        "            color: #fff; margin:0;\n" +
                         "        }\n" +
-                        "        ul {\n" +
-                        "            margin:0 0 8px 0;padding:0;\n" +
-                        "            list-style: none; \n" +
-                        "        }\n" +
-                        "        ul ul {border-left:1px #666 solid;} ul ul li {\n" +
-                        "            margin: 4px 0 8px 12px; line-height:1.2;\n" +
+                        "        ul {list-style: none;\n" +
+                        "             padding:0; margin:0;\n" +
+                        "             \n" +
+                        "        }\n " +
+                        "        .top-li { background:rgba(0,0,0,0.8); margin-bottom:6px; padding-bottom:8px;}" +
+                        "        ul ul {border-left:1px rgba(255,255,255,0.1) solid; margin-left:2px;} ul ul li {\n" +
+                        "            margin-left:8px; line-height:1.2;\n" +
                         "        }\n" +
                         "        hr {\n" +
                         "            height: 1px;\n" +
@@ -545,29 +546,30 @@ public class DownloadActivity extends AppCompatActivity {
                         "            margin: 0;\n" +
                         "            border-bottom: 1px #343434 solid;\n" +
                         "        }\n" +
-                        "        p {\n" +
-                        "            margin: 8px 0 8px 0;\n" +
-                        "        }\n" +
                         "        .author_text {\n" +
-                        "            color:#db316f; font-size:14px\n" +
+                        "            font-size:14px\n" +
                         "        }\n" +
-                        "        .red_text {\n" +
+                        "        .red {\n" +
                         "            color:red;\n" +
                         "        }\n" +
                         "        .username {\n" +
-                        "            color:#999;\n" +
+                        "            color:#777;\n" +
                         "            font-size:12px;\n" +
-                        "            margin-bottom:8px;\n" +
                         "        }\n" +
                         "        a {\n" +
                         "            color:#f5c8d8;\n" +
                         "            \n" +
                         "        }\n" +
+                        "        .karma {text-align:right;" +
+                        "            font-size:14px; font-weight:bold; color:#777; padding-right:6px; margin-top:-4px;}" +
+                        "        .karma svg { \n" +
+                        "           vertical-align:middle; margin-top:-2px;} " +
+                        "        .karma-text {line-height:20px;}" +
                         "        .author_flair {\n" +
                         "            border:1px #666 solid;\n" +
                         "            padding:2px;\n" +
                         "        } .comment {\n" +
-                        "            padding: 8px 6px 1px 0px; margin: 8px 0 8px 0;\n" +
+                        "            padding: 8px 8px 8px 8px;\n" +
                         "        }\n" +
                         "    </style>\n" +
                         "</head>\n" +
@@ -612,30 +614,47 @@ public class DownloadActivity extends AppCompatActivity {
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
+                String upvoteSVG = "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+                        "\t width=\"20px\" fill=\"#777777\" height=\"20px\" viewBox=\"0 0 20 20\" style=\"enable-background:new 0 0 20 20;\" xml:space=\"preserve\">\n" +
+                        "<path d=\"M9.951908,4.166667H9.951867l-5.36036,5.825781C4.593775,9.997617,4.592553,9.994831,4.594821,10h3.321361\n" +
+                        "\tc0.000668,0.000668,0.001042,0.001041,0.001709,0.001709V15h4.166667v-4.99648c0.001369-0.001369,0.002151-0.002151,0.00352-0.00352\n" +
+                        "\th3.329831L9.951908,4.166667z\"/>\n" +
+                        "</svg>";
+                String downvoteSVG = "<svg version=\"1.1\" id=\"Layer_1\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" x=\"0px\" y=\"0px\"\n" +
+                        "\t width=\"20px\" fill=\"red\" height=\"20px\" viewBox=\"0 0 20 20\" style=\"enable-background:new 0 0 20 20;\" xml:space=\"preserve\">\n" +
+                        "<path d=\"M10.048084,15.833334h0.00004l5.360361-5.825782c-0.002268-0.005168-0.001046-0.002383-0.003314-0.007551H12.08381\n" +
+                        "\tc-0.000668-0.000668-0.001041-0.001042-0.001709-0.001709V5H7.915434v4.99648c-0.001369,0.001369-0.002151,0.002151-0.00352,0.00352\n" +
+                        "\tH4.582084L10.048084,15.833334z\"/>\n" +
+                        "</svg>";
                 String comment = "<div class=\"comment\">" +
                         "<div class=\"username\">"
-                        + ((Integer.parseInt(Objects.requireNonNull(arrayList.get(i).get("score"))) < 0) ? " ↓<span class=\"red_text\">"
-                        + arrayList.get(i).get("score") + "</span>" : " ↑" + arrayList.get(i).get("score")) +
-                        "  · <span class=\"author_text\">" + " "
+                        + "<span class=\"author_text\">" + " "
                         + arrayList.get(i).get("author") + " </span>"
                         + (!Objects.equals(arrayList.get(i).get("author_flair"), "null") ? " <span class=\"author_flair\">"
                         + arrayList.get(i).get("author_flair") + "</span>" : "")
-                        + " • " + ago +
-                        "</div>"
-                        + arrayList.get(i).get("body") +
-                        "</div>";
+                        + " • " + ago
+                        + "</div>"
+                        + arrayList.get(i).get("body")
+                        + "<div class=\"karma\">"
+                        + ((Integer.parseInt(Objects.requireNonNull(arrayList.get(i).get("score"))) < 0) ? downvoteSVG + "<span class=\"red karma-text\">"
+                        + arrayList.get(i).get("score") + "</span>" : upvoteSVG  + "<span class=\"karma-text\">" + arrayList.get(i).get("score")) + "</span>"
+                        + "</div>"
+                        + "</div>";
                 int depth = Integer.parseInt(Objects.requireNonNull(arrayList.get(i).get("parent")));
                 if (prev_depth > depth) {
                     for (int j = depth; j < prev_depth; j++) {
                         comments_html.append("</ul></li>");
                     }
                     prev_depth = depth;
-                    comments_html.append("<li>").append(comment);
+                    String CSS = "class=\"top-li\"";
+                    comments_html.append("<li " + ((depth == 0) ? CSS : "") + ">").append(comment);
                 } else if (depth == prev_depth) {
                     if (comments_html.toString().equals("")) {
-                        comments_html.append("<div class=\"list\"><ul><li>").append(comment);
+                        // top level item
+                        comments_html.append("<div class=\"list\"><ul class=\"top-ul\"><li class=\"top-li\">").append(comment);
                     } else {
-                        comments_html.append("</li><li>").append(comment);
+                        String CSS = "class=\"top-li\"";
+                        comments_html.append("</li><li " + ((depth == 0) ? CSS : "") + ">").append(comment);
                     }
                 } else if (depth == prev_depth + 1) {
                     prev_depth++;

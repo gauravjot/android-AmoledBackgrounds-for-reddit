@@ -3,6 +3,8 @@ package com.droidheat.amoledbackgrounds;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -70,14 +75,32 @@ public class MyGridWallpaperAdapter extends BaseAdapter {
         final TextView textFlair = convertView.findViewById(R.id.post_flair);
         final TextView textComment = convertView.findViewById(R.id.comments);
 
-        Picasso.get().load(wallpaper.get("image")).resize(560,0).into(preview);
-        textView.setText(wallpaper.get("title").replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
-                .replaceAll("\\{[^}]*\\}", ""));
-        if (Objects.equals(wallpaper.get("author_flair"), "null")) {
-            textAuthor.setText(String.format("u/%s", wallpaper.get("author")));
-        } else {
-            textAuthor.setText(String.format("u/%s • %s", wallpaper.get("author"), wallpaper.get("author_flair")));
+        /*
+         * Getting when wallpaper was uploaded
+         */
+        Date date = new java.util.Date(Long.parseLong(Objects.requireNonNull(wallpaper.get("created_utc"))) * 1000L);
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
+        sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT-4"));
+        String formattedDate = sdf.format(date);
+        CharSequence ago = null;
+        try {
+            ago = DateUtils.getRelativeTimeSpanString(sdf.parse(formattedDate).getTime(), System.currentTimeMillis(), DateUtils.MINUTE_IN_MILLIS);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
+
+        /*
+         * Loading image
+         */
+        Picasso.get().load(wallpaper.get("preview")).resize(560,0).into(preview);
+        Log.d("Fsa",wallpaper.get("preview"));
+
+        /*
+         * TextViews
+         */
+        textView.setText(wallpaper.get("title").replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
+                .replaceAll("\\{[^}]*\\}", "").replaceAll("-","").replaceAll("&amp;", "&").trim());
+        textAuthor.setText(String.format("by %s \n%s", wallpaper.get("author"), ago));
         textResolution.setText(String.format("%sx%s", wallpaper.get("width"), wallpaper.get("height")));
         textScore.setText(wallpaper.get("score"));
         textFlair.setText(wallpaper.get("flair"));

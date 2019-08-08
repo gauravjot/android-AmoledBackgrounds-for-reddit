@@ -264,7 +264,7 @@
             android:layout_height="match_parent"
             android:layout_margin="8dp"
             android:id="@+id/commentsView"
-            app:cardBackgroundColor="#e9000000">
+            app:cardBackgroundColor="#101010">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -273,14 +273,14 @@
 
                 <WebView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
                     android:id="@+id/webView"
                     android:layout_weight="1"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="#99555555">
+                    android:background="#151515">
 
                     <Button
                         android:layout_width="wrap_content"

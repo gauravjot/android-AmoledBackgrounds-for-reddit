@@ -2,20 +2,13 @@
 
 
     <string name="changelog_message">
-        New features added to app:\n
-        ☑ You can now search wallpapers in whole r/AmoledBackgrounds\n
-        ☑ We have added ability to read comments to a post. Simply click on "View Comments"
-            or click post name on the download page\n
-        ☑ Application name is changed from "r/AmoledBackgrounds" to "AmoledBackgrounds", so
-            it will be easier to find app in app drawer\n
-        ☑ There are new options in options menu\n
+        Updates:\n
+        ☑ Added when the wallpaper was uploaded\n
+        ☑ Improved "view comments" window significantly \n
+        ☑ We have switched to more optimized resolution for wallpaper preview, so app will now use less data than before \n
+        ☑ Several UI tweaks\n
         \n
-        Other updates:\n
-        ☑ We have added animations to smoothen the experience\n
-        ☑ Removed a bug with fullscreen wallpaper on download page\n
-        ☑ Added comment count on main page now\n
-        \n
-        Future Updates:\n
+        Under beta:\n
         ☐ Ability to auto-set the wallpaper daily or weekly\n
         \n
         Don\'t forget to rate us 5⭐ on play store!

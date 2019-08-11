@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Amoled Backgrounds");
 
-        AppUtils.scheduleJob(this);
+        //AppUtils.scheduleJob(this);
 
         try {
             SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);

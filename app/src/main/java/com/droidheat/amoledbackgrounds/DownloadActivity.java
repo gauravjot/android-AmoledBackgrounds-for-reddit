@@ -537,7 +537,7 @@ public class DownloadActivity extends AppCompatActivity {
                         "             \n" +
                         "        }\n " +
                         "        .top-li { background:rgba(0,0,0,0.8); margin-bottom:6px; padding-bottom:8px;}" +
-                        "        ul ul {border-left:1px rgba(255,255,255,0.1) solid; margin-left:2px;} ul ul li {\n" +
+                        "        ul ul {border-left:1px rgba(255,255,255,0.25) solid; margin-left:2px;} ul ul li {\n" +
                         "            margin-left:8px; line-height:1.2;\n" +
                         "        }\n" +
                         "        hr {\n" +

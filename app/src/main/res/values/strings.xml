@@ -2,16 +2,15 @@
 
 
     <string name="changelog_message">
-        Updates:\n
-        ☑ Added when the wallpaper was uploaded\n
-        ☑ Improved "view comments" window significantly \n
-        ☑ We have switched to more optimized resolution for wallpaper preview, so app will now use less data than before \n
-        ☑ Several UI tweaks\n
-        \n
-        Under beta:\n
-        ☐ Ability to auto-set the wallpaper daily or weekly\n
-        \n
-        Don\'t forget to rate us 5⭐ on play store!
+        <!--Updates:\n-->
+        <!--☑ Added when the wallpaper was uploaded\n-->
+        <!--☑ Improved "view comments" window significantly \n-->
+        <!--☑ We have switched to more optimized resolution for wallpaper preview, so app will now use less data than before \n-->
+        <!--☑ Several UI tweaks\n-->
+        <!--\n-->
+        ☑ Ability to auto-set the wallpaper daily. Go to three dots on top right and choose "Daily Wallpaper" to enable the feature.\n
+        <!--\n-->
+        <!--Don\'t forget to rate us 5⭐ on play store!-->
     </string>
 
 
@@ -27,6 +26,11 @@
         <item>Top Month</item>
         <item>Top Year</item>
         <item>Top All</item>
+    </string-array>
+    <string-array name="set_auto_sort_array">
+        <item>Hot</item>
+        <item>Top 24h</item>
+        <item>Top Week</item>
     </string-array>
 
     <string name="title_activity_download">DownloadActivity</string>
@@ -44,4 +48,6 @@
     <string name="preference_file_key">key1</string>
     <string name="share">Share with Friends</string>
     <string name="rate_our_app_5">Rate Our App 5⭐</string>
+    <string name="daily_wallpaper_dialog_instructions">This feature runs daily at same time you enable this setting. Please choose your preferred sort for daily wallpaper -</string>
+    <string name="automatic_wallpaper">Daily Wallpaper</string>
 </resources>

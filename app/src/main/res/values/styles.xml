@@ -24,4 +24,10 @@
         <item name="android:background">@color/black_overlay</item>
     </style>
 
+    <!-- AutomaticWallpaperActivity -->
+    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
 </resources>

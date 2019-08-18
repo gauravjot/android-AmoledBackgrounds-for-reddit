@@ -5,7 +5,7 @@
     <color name="colorAccent">#D81B60</color>
     <color name="unselected_text">#999</color>
     <color name="colorBackground">#000000</color>
-    <color name="redditOrange">#FF5700</color>
+    <color name="colorDialogBackground">#242424</color>
 
     <color name="black_overlay">#99000000</color>
 </resources>

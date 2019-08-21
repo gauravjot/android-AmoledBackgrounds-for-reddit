@@ -9,6 +9,11 @@
         app:actionViewClass="android.support.v7.widget.SearchView" />
 
     <item
+        android:title="@string/automatic_wallpaper"
+        android:id="@+id/action_auto_wallpaper"
+        app:showAsAction="never"/>
+
+    <item
         android:title="@string/share"
         android:id="@+id/action_share"
         app:showAsAction="never"/>

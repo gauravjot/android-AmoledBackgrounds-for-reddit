@@ -56,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("Amoled Backgrounds");
 
-        //AppUtils.scheduleJob(this);
-
         try {
             SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -164,6 +162,9 @@ public class MainActivity extends AppCompatActivity {
                     "Hey! Check out this android app at: " + this.getString(R.string.play_store_url));
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
+        } else if (item.getItemId() == R.id.action_auto_wallpaper) {
+            Intent intent = new Intent(MainActivity.this,AutomaticWallpaperActivity.class);
+            startActivity(intent);
         }
         return true;
     }

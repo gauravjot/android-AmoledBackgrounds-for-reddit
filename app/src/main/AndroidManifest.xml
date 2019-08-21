@@ -17,13 +17,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-
-        <!--<receiver android:name=".DailyServiceBroadcastReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
-
+        <activity
+            android:name=".AutomaticWallpaperActivity"
+            android:theme="@style/DialogTheme" />
+        <!-- <receiver android:name=".DailyServiceBroadcastReceiver"> -->
+        <!-- <intent-filter> -->
+        <!-- <action android:name="android.intent.action.BOOT_COMPLETED" /> -->
+        <!-- </intent-filter> -->
+        <!-- </receiver> -->
         <service
             android:name=".DailyService"
             android:permission="android.permission.BIND_JOB_SERVICE" />

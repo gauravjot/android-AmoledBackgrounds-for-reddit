@@ -17,9 +17,9 @@ public class AppUtils {
         ComponentName serviceComponent = new ComponentName(context, DailyService.class);
         JobInfo.Builder builder = new JobInfo.Builder(5799435, serviceComponent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setMinimumLatency(50 * 1000); // wait at least 1 day
+            builder.setMinimumLatency(24 * 60 * 60 * 1000); // wait at least 1 day
         } else {
-            builder.setPeriodic(50 * 1000); // wait at least 1 day
+            builder.setPeriodic(24 * 60 * 60 * 1000); // wait at least 1 day
         }
         builder.setRequiresCharging(false); // we don't care if the device is charging or not
         JobScheduler jobScheduler = context.getSystemService(JobScheduler.class);

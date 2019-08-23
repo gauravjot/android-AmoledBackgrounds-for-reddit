@@ -21,6 +21,7 @@ public class UtilsJSON {
 
         try {
             String html = jsonGetRequest(url);
+            Log.d("UtilsJSON", html);
 
             // html is JSON
             // Start of Organising JSON to ArrayList
@@ -160,7 +161,6 @@ public class UtilsJSON {
         return json;
     }
     private static String streamToString(InputStream inputStream) {
-        String text = new Scanner(inputStream, "UTF-8").useDelimiter("\\Z").next();
-        return text;
+        return new Scanner(inputStream, "UTF-8").useDelimiter("\\Z").next();
     }
 }

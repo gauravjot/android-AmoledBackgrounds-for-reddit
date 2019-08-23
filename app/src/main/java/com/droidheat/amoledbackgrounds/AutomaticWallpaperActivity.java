@@ -1,7 +1,6 @@
 package com.droidheat.amoledbackgrounds;
 
 import android.app.job.JobScheduler;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SwitchCompat;
@@ -11,8 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-import java.util.Objects;
 
 public class AutomaticWallpaperActivity extends AppCompatActivity {
 
@@ -37,7 +34,7 @@ public class AutomaticWallpaperActivity extends AppCompatActivity {
                     (new SharedPrefsUtils(AutomaticWallpaperActivity.this))
                             .writeSharedPrefs("daily_wallpaper", true);
                     DailyWallpaper dailyWallpaper = new DailyWallpaper();
-                    dailyWallpaper.apply(AutomaticWallpaperActivity.this);
+                    dailyWallpaper.applyAsync(AutomaticWallpaperActivity.this);
                     AppUtils.scheduleJob(AutomaticWallpaperActivity.this);
                     Toast.makeText(AutomaticWallpaperActivity.this, "Wallpaper will be set daily from tomorrow!",
                             Toast.LENGTH_LONG).show();
@@ -62,15 +59,9 @@ public class AutomaticWallpaperActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedSort = position;
-                String sort = "Hot";
-                if (selectedSort == 1) {
-                    sort = "Top 24h";
-                } else if (selectedSort == 2) {
-                    sort = "Top Week";
-                }
                 new SharedPrefsUtils(AutomaticWallpaperActivity.this).writeSharedPrefs("auto_sort", selectedSort);
                 DailyWallpaper dailyWallpaper = new DailyWallpaper();
-                dailyWallpaper.apply(AutomaticWallpaperActivity.this);
+                dailyWallpaper.applyAsync(AutomaticWallpaperActivity.this);
             }
 
             @Override

@@ -2,6 +2,9 @@ package com.droidheat.amoledbackgrounds;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,7 +14,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -28,14 +34,131 @@ import java.util.Objects;
     private static HashMap<String, String> wallpaper;
     private static String ext, titleStr;
 
+    private String NOTIFICATION_CHANNEL = "daily_wallpaper";
+
     DailyWallpaper() {
     }
 
-    void apply(Context context) {
+    void applyAsync(Context context) {
         if (new SharedPrefsUtils(context).readSharedPrefsBoolean("daily_wallpaper", false)) {
             (new GrabItemsAsyncTask(context)).execute();
         }
     }
+
+    void apply(Context context) {
+        pushNotification(context, "Looking up the wallpaper to Reddit...");
+        int sort_i = new SharedPrefsUtils(context).readSharedPrefsInt("auto_sort", 0);
+        String sort = "hot.json";
+        if (sort_i == 1) {
+            sort = "top.json?t=day";
+        } else if (sort_i == 2) {
+            sort = "top.json?t=week";
+        }
+        String url = "https://www.reddit.com/r/amoledbackgrounds/" + sort;
+
+        try {
+            wallpaper = (new UtilsJSON()).grabPostsAsArrayList(url.trim()).get(0);
+        } catch (Exception e) {
+            pushNotification(context, "Error: Unable to reach Reddit for daily wallpaper.");
+        }
+
+        if (wallpaper != null && !wallpaper.isEmpty()) {
+            context.registerReceiver(onDownloadComplete1, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+            titleStr = Objects.requireNonNull(wallpaper.get("title")).replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
+                    .replaceAll("\\{[^}]*\\}", "");
+            titleStr = titleStr.replaceAll("\\u00A0", " ").trim();
+            titleStr = titleStr.replaceAll(" ", "_") + "_" + wallpaper.get("name");
+            titleStr = titleStr.substring(0, Math.min(titleStr.length(), 50));
+            titleStr = (new AppUtils()).validFileNameConvert(titleStr);
+            ext = Objects.requireNonNull(wallpaper.get("image")).substring(Objects.requireNonNull(wallpaper.get("image")).lastIndexOf("."));
+            ext.trim();
+
+            // Checking if the folder in device exists
+            File direct = new File(Environment.getExternalStorageDirectory()
+                    + "/AmoledBackgrounds");
+            if (!direct.exists()) {
+                direct.mkdirs();
+            }
+
+            // If file is already downloaded before then we simply applyAsync it
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + "/AmoledBackgrounds/" + titleStr + ext);
+            if (file.exists()) {
+                pushNotification(context, "Setting the wallpaper...");
+                WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+                try {
+                    wallpaperManager.setBitmap(
+                            decodeFile(
+                                    file,
+                                    Integer.parseInt(Objects.requireNonNull(wallpaper.get("width"))),
+                                    Integer.parseInt(Objects.requireNonNull(wallpaper.get("height")))
+                            )
+                    );
+                    Log.d("DailyWallpaper", "Wallpaper ran 2");
+                    Log.d("DailyWallpaper", "Service ran 3");
+                } catch (Exception ignored) {
+                }
+
+                pushNotification(context, "Wallpaper is applied.");
+                return;
+            }
+            Log.d("DailyWallpaper", "Wallpaper ran 1" + wallpaper.get("image"));
+
+            DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+
+            Uri downloadUri = Uri.parse(wallpaper.get("image"));
+            DownloadManager.Request request = new DownloadManager.Request(
+                    downloadUri);
+
+            request.setAllowedNetworkTypes(
+                    DownloadManager.Request.NETWORK_WIFI
+                            | DownloadManager.Request.NETWORK_MOBILE)
+                    .setAllowedOverRoaming(false)
+                    .setTitle(titleStr)
+                    .setDescription("r/AmoledBackgrounds")
+                    .setDestinationInExternalPublicDir("/AmoledBackgrounds", titleStr + ext)
+                    .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
+                    .setAllowedOverRoaming(true)
+                    .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
+            try {
+                downloadID = mgr.enqueue(request);
+                pushNotification(context, "Downloading the wallpaper...");
+            } catch (Exception e) {
+                Log.d("DailyWallpaper", e.getMessage());
+                pushNotification(context, "Error: Unable to download the wallpaper from Reddit.");
+            }
+        }
+    }
+
+    private BroadcastReceiver onDownloadComplete1 = new BroadcastReceiver() {
+         @Override
+         public void onReceive(Context context, Intent intent) {
+             //Fetching the download id received with the broadcast
+             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+             //Checking if the received broadcast is for our enqueued download by matching download id
+             if (downloadID == id) {
+                 pushNotification(context, "Setting the wallpaper...");
+                 File direct = new File(Environment.getExternalStorageDirectory()
+                         + "/AmoledBackgrounds/" + titleStr + ext);
+                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
+                 try {
+                     wallpaperManager.setBitmap(
+                             decodeFile(
+                                     direct,
+                                     Integer.parseInt(Objects.requireNonNull(wallpaper.get("width"))),
+                                     Integer.parseInt(Objects.requireNonNull(wallpaper.get("height")))
+                             )
+                     );
+                     Log.d("DailyWallpaper", "Wallpaper ran 2");
+                     Log.d("DailyWallpaper", "Service ran 3");
+                     pushNotification(context, "Wallpaper is applied.");
+                 } catch (Exception ignored) {
+                 }
+             }
+             wallpaper = null;
+             context.unregisterReceiver(onDownloadComplete1);
+         }
+     };
 
     private static class GrabItemsAsyncTask extends AsyncTask<String, Integer, Context> {
 
@@ -84,7 +207,7 @@ import java.util.Objects;
                     direct.mkdirs();
                 }
 
-                // If file is already downloaded before then we simply apply it
+                // If file is already downloaded before then we simply applyAsync it
                 File file = new File(Environment.getExternalStorageDirectory()
                         + "/AmoledBackgrounds/" + titleStr + ext);
                 if (file.exists()) {
@@ -135,13 +258,15 @@ import java.util.Objects;
             if (downloadID == id) {
                 SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask(context);
                 setWallpaperAsyncTask.execute();
-                context.unregisterReceiver(onDownloadComplete);
                 Log.d("DailyWallpaper", "Service ran 3");
             }
+            context.unregisterReceiver(onDownloadComplete);
         }
     };
 
-    static class SetWallpaperAsyncTask extends AsyncTask<String, Integer, String> {
+
+
+    private static class SetWallpaperAsyncTask extends AsyncTask<String, Integer, String> {
 
         private WeakReference<Context> weakReference;
 
@@ -166,16 +291,16 @@ import java.util.Objects;
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            wallpaper = null;
             return null;
         }
 
         @Override
         protected void onPostExecute(String s) {
-            weakReference.get().unregisterReceiver(onDownloadComplete);
         }
     }
 
-    public static Bitmap decodeFile(File f, int WIDTH, int HIGHT) {
+    private static Bitmap decodeFile(File f, int WIDTH, int HIGHT) {
         try {
             //Decode image size
             BitmapFactory.Options o = new BitmapFactory.Options();
@@ -197,4 +322,44 @@ import java.util.Objects;
         return null;
     }
 
-}
+    private void pushNotification(Context context, String message) {
+        createNotificationChannel(context);
+
+        // Create an explicit intent for an Activity in your app
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
+                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setContentTitle("Daily Wallpaper")
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+
+        notificationManager.notify(456653, builder.build());
+
+
+    }
+
+     private void createNotificationChannel(Context context) {
+         // Create the NotificationChannel, but only on API 26+ because
+         // the NotificationChannel class is new and not in the support library
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+             CharSequence name = "Daily Wallpaper";
+             String description = "Notification runs when daily wallpaper updates.";
+             int importance = NotificationManager.IMPORTANCE_DEFAULT;
+             NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL, name, importance);
+             channel.setDescription(description);
+             // Register the channel with the system; you can't change the importance
+             // or other notification behaviors after this
+             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+             notificationManager.createNotificationChannel(channel);
+         }
+     }
+
+
+ }

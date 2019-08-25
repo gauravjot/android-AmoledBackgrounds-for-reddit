@@ -17,7 +17,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -36,6 +35,8 @@ import java.util.Objects;
 
     private String NOTIFICATION_CHANNEL = "daily_wallpaper";
 
+    private int NOTIFICATION_ID = 456653;
+
     DailyWallpaper() {
     }
 
@@ -46,7 +47,8 @@ import java.util.Objects;
     }
 
     void apply(Context context) {
-        pushNotification(context, "Looking up the wallpaper to Reddit...");
+        NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+        pushNotification(context, "Looking up the wallpaper to Reddit...", notificationManager);
         int sort_i = new SharedPrefsUtils(context).readSharedPrefsInt("auto_sort", 0);
         String sort = "hot.json";
         if (sort_i == 1) {
@@ -59,7 +61,8 @@ import java.util.Objects;
         try {
             wallpaper = (new UtilsJSON()).grabPostsAsArrayList(url.trim()).get(0);
         } catch (Exception e) {
-            pushNotification(context, "Error: Unable to reach Reddit for daily wallpaper.");
+            pushNotification(context, "Error: Unable to reach Reddit for daily wallpaper.",
+                    notificationManager);
         }
 
         if (wallpaper != null && !wallpaper.isEmpty()) {
@@ -84,7 +87,8 @@ import java.util.Objects;
             File file = new File(Environment.getExternalStorageDirectory()
                     + "/AmoledBackgrounds/" + titleStr + ext);
             if (file.exists()) {
-                pushNotification(context, "Setting the wallpaper...");
+                pushNotification(context, "Setting the wallpaper...",
+                        notificationManager);
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
                 try {
                     wallpaperManager.setBitmap(
@@ -98,8 +102,7 @@ import java.util.Objects;
                     Log.d("DailyWallpaper", "Service ran 3");
                 } catch (Exception ignored) {
                 }
-
-                pushNotification(context, "Wallpaper is applied.");
+                notificationManager.cancel(NOTIFICATION_ID);
                 return;
             }
             Log.d("DailyWallpaper", "Wallpaper ran 1" + wallpaper.get("image"));
@@ -122,10 +125,10 @@ import java.util.Objects;
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
             try {
                 downloadID = mgr.enqueue(request);
-                pushNotification(context, "Downloading the wallpaper...");
+                pushNotification(context, "Downloading the wallpaper...",notificationManager);
             } catch (Exception e) {
                 Log.d("DailyWallpaper", e.getMessage());
-                pushNotification(context, "Error: Unable to download the wallpaper from Reddit.");
+                pushNotification(context, "Error: Unable to download the wallpaper from Reddit.",notificationManager);
             }
         }
     }
@@ -137,7 +140,9 @@ import java.util.Objects;
              long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
              //Checking if the received broadcast is for our enqueued download by matching download id
              if (downloadID == id) {
-                 pushNotification(context, "Setting the wallpaper...");
+
+                 NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+                 pushNotification(context, "Setting the wallpaper...", notificationManager);
                  File direct = new File(Environment.getExternalStorageDirectory()
                          + "/AmoledBackgrounds/" + titleStr + ext);
                  WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
@@ -151,7 +156,7 @@ import java.util.Objects;
                      );
                      Log.d("DailyWallpaper", "Wallpaper ran 2");
                      Log.d("DailyWallpaper", "Service ran 3");
-                     pushNotification(context, "Wallpaper is applied.");
+                     pushNotification(context, "Wallpaper is applied.",notificationManager);
                  } catch (Exception ignored) {
                  }
              }
@@ -322,8 +327,8 @@ import java.util.Objects;
         return null;
     }
 
-    private void pushNotification(Context context, String message) {
-        createNotificationChannel(context);
+    private void pushNotification(Context context, String message, NotificationManager notificationManager) {
+        createNotificationChannel(notificationManager);
 
         // Create an explicit intent for an Activity in your app
         Intent intent = new Intent(context, MainActivity.class);
@@ -334,29 +339,24 @@ import java.util.Objects;
                 .setSmallIcon(R.mipmap.ic_launcher_round)
                 .setContentTitle("Daily Wallpaper")
                 .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setPriority(NotificationCompat.PRIORITY_LOW)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-
-        notificationManager.notify(456653, builder.build());
-
-
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
-     private void createNotificationChannel(Context context) {
+     private void createNotificationChannel(NotificationManager notificationManager) {
          // Create the NotificationChannel, but only on API 26+ because
          // the NotificationChannel class is new and not in the support library
          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
              CharSequence name = "Daily Wallpaper";
              String description = "Notification runs when daily wallpaper updates.";
-             int importance = NotificationManager.IMPORTANCE_DEFAULT;
+             int importance = NotificationManager.IMPORTANCE_LOW;
              NotificationChannel channel = new NotificationChannel(NOTIFICATION_CHANNEL, name, importance);
              channel.setDescription(description);
              // Register the channel with the system; you can't change the importance
              // or other notification behaviors after this
-             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
              notificationManager.createNotificationChannel(channel);
          }
      }

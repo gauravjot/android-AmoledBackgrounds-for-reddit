@@ -17,11 +17,11 @@ public class DailyService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         Log.d("DailyService","Service ran 1");
+        AppUtils.scheduleJob(this);
         DailyWallpaper dailyWallpaper = new DailyWallpaper();
         dailyWallpaper.apply(this);
         //AppUtils.scheduleJob(this); // reschedule the job
         jobFinished(params,false);
-        AppUtils.scheduleJob(this);
         return true;
     }
 

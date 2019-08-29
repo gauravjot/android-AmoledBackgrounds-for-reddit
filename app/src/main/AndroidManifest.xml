@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -22,7 +23,10 @@
             android:name=".AutomaticWallpaperActivity"
             android:theme="@style/DialogTheme" />
 
-        <receiver android:name=".DailyServiceBroadcastReceiver">
+        <receiver
+            android:enabled="true"
+            android:name=".DailyServiceBroadcastReceiver"
+            android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
@@ -30,7 +34,9 @@
 
         <service
             android:name=".DailyService"
-            android:permission="android.permission.BIND_JOB_SERVICE" />
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:enabled="true"
+            android:exported="true" />
 
         <activity android:name=".SearchActivity">
             <intent-filter>

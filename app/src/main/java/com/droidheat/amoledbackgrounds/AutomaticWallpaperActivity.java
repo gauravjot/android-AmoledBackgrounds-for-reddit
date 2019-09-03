@@ -33,8 +33,8 @@ public class AutomaticWallpaperActivity extends AppCompatActivity {
                             .writeSharedPrefs("auto_sort", selectedSort);
                     (new SharedPrefsUtils(AutomaticWallpaperActivity.this))
                             .writeSharedPrefs("daily_wallpaper", true);
-                    DailyWallpaper dailyWallpaper = new DailyWallpaper();
-                    dailyWallpaper.applyAsync(AutomaticWallpaperActivity.this);
+                    DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
+                    dailyWallpaperUtils.applyAsync(AutomaticWallpaperActivity.this);
                     AppUtils.scheduleJob(AutomaticWallpaperActivity.this);
                     Toast.makeText(AutomaticWallpaperActivity.this, "Wallpaper will be set daily from tomorrow!",
                             Toast.LENGTH_LONG).show();
@@ -60,8 +60,8 @@ public class AutomaticWallpaperActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 selectedSort = position;
                 new SharedPrefsUtils(AutomaticWallpaperActivity.this).writeSharedPrefs("auto_sort", selectedSort);
-                DailyWallpaper dailyWallpaper = new DailyWallpaper();
-                dailyWallpaper.applyAsync(AutomaticWallpaperActivity.this);
+                DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
+                dailyWallpaperUtils.applyAsync(AutomaticWallpaperActivity.this);
             }
 
             @Override

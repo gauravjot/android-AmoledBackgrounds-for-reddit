@@ -14,10 +14,10 @@ public class AppUtils {
 
     // schedule the start of the service every 10 - 30 seconds
     public static void scheduleJob(Context context) {
-        ComponentName serviceComponent = new ComponentName(context, DailyService.class);
+        ComponentName serviceComponent = new ComponentName(context, DailyJobService.class);
         JobInfo.Builder builder = new JobInfo.Builder(5799435, serviceComponent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setMinimumLatency(59 * 60 * 1000); // wait at least 1 day
+            builder.setMinimumLatency(60 * 60 * 1000); // wait at least 1 day
             builder.setOverrideDeadline(61 * 60 * 1000);
         } else {
             builder.setPeriodic(60 * 60 * 1000); // wait at least 1 day

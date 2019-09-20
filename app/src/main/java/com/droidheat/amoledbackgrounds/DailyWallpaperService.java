@@ -154,7 +154,6 @@ public class DailyWallpaperService extends Service {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            pushNotification("download complete intent received. before we match download ids.", notificationManager);
             if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
                 long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                 if (downloadID == id) {

@@ -89,6 +89,14 @@ public class MainActivity extends AppCompatActivity {
                 else
                     navigation.getMenu().getItem(0).setChecked(false);
 
+                if (i == 2) {
+                    getSupportActionBar().setTitle("Settings");
+                } else if (i == 1) {
+                    getSupportActionBar().setTitle("Downloads");
+                } else {
+                    getSupportActionBar().setTitle("Amoled Backgrounds");
+                }
+
                 navigation.getMenu().getItem(i).setChecked(true);
                 prevMenuItem = navigation.getMenu().getItem(i);
             }
@@ -109,11 +117,11 @@ public class MainActivity extends AppCompatActivity {
     {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         Fragment wallpaperFragment = new WallpaperFragment();
-        //Fragment categoriesFragment = new CategoriesFragment();
+        Fragment settingsFragment = new SettingsFragment();
         Fragment downloadsFragment = new DownloadsFragment();
         adapter.addFragment(wallpaperFragment);
-        //adapter.addFragment(categoriesFragment);
         adapter.addFragment(downloadsFragment);
+        adapter.addFragment(settingsFragment);
         viewPager.setAdapter(adapter);
     }
 
@@ -144,12 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.privacy_policy) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.com/amoledwallpapers/privacy_policy.html"));
-            startActivity(browserIntent);
-        } else if (item.getItemId() == R.id.action_changelog) {
-            ((new AppUtils()).changelog(this)).show();
-        } else if (item.getItemId() == R.id.action_rate) {
+        if (item.getItemId() == R.id.action_rate) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.getString(R.string.play_store_url)));
             startActivity(browserIntent);
         } else if (item.getItemId() == R.id.action_subreddit) {
@@ -162,10 +165,11 @@ public class MainActivity extends AppCompatActivity {
                     "Hey! Check out this android app at: " + this.getString(R.string.play_store_url));
             sendIntent.setType("text/plain");
             startActivity(sendIntent);
-        } else if (item.getItemId() == R.id.action_auto_wallpaper) {
-            Intent intent = new Intent(MainActivity.this,AutomaticWallpaperActivity.class);
-            startActivity(intent);
         }
+//        else if (item.getItemId() == R.id.action_auto_wallpaper) {
+//            Intent intent = new Intent(MainActivity.this,AutomaticWallpaperActivity.class);
+//            startActivity(intent);
+//        }
         return true;
     }
 }

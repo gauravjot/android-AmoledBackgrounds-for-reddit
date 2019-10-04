@@ -4,39 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:id="@+id/optionBar"
-        android:background="?android:attr/windowBackground">
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="48dp"-->
+<!--        android:id="@+id/optionBar"-->
+<!--        android:background="?android:attr/windowBackground">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Downloads"
-            android:textColor="@android:color/white"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"/>
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_centerVertical="true"-->
+<!--            android:text="Downloads"-->
+<!--            android:textColor="@android:color/white"-->
+<!--            android:textStyle="bold"-->
+<!--            android:textSize="18sp"-->
+<!--            android:paddingStart="16dp"-->
+<!--            android:paddingEnd="16dp"/>-->
 
-        <!--<ImageView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignParentEnd="true"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:src="@drawable/ic_settings_black_24dp"-->
-            <!--android:tint="@color/unselected_text"-->
-            <!--android:layout_marginEnd="16dp"/>-->
+<!--        &lt;!&ndash;<ImageView&ndash;&gt;-->
+<!--            &lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+<!--            &lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+<!--            &lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
+<!--            &lt;!&ndash;android:layout_centerVertical="true"&ndash;&gt;-->
+<!--            &lt;!&ndash;android:src="@drawable/ic_settings_black_24dp"&ndash;&gt;-->
+<!--            &lt;!&ndash;android:tint="@color/unselected_text"&ndash;&gt;-->
+<!--            &lt;!&ndash;android:layout_marginEnd="16dp"/>&ndash;&gt;-->
 
-    </RelativeLayout>
+<!--    </RelativeLayout>-->
 
     <GridView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/optionBar"
         android:numColumns="2"
         android:horizontalSpacing="16dp"
         android:verticalSpacing="24dp"

@@ -14,6 +14,11 @@
     <item
         android:id="@+id/navigation_notifications"
         android:icon="@drawable/ic_file_download_black_24dp"
-        android:title="Downloads" />
+        android:title="@string/downloads" />
+
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/ic_settings_white_24dp"
+        android:title="@string/settings" />
 
 </menu>

@@ -8,7 +8,7 @@
         <!--☑ We have switched to more optimized resolution for wallpaper preview, so app will now use less data than before \n-->
         <!--☑ Several UI tweaks\n-->
         <!--\n-->
-        ☑ Ability to auto-set the wallpaper daily. Go to three dots on top right and choose "Daily Wallpaper" to enable the feature.\n
+        ☑ Ability to auto-set the wallpaper daily. Scroll to settings menu on homepage to activate this feature.\n
         <!--\n-->
         <!--Don\'t forget to rate us 5⭐ on play store!-->
     </string>
@@ -50,4 +50,6 @@
     <string name="rate_our_app_5">Rate Our App 5⭐</string>
     <string name="daily_wallpaper_dialog_instructions">This feature runs daily at same time you enable this setting. Please choose your preferred sort for daily wallpaper -</string>
     <string name="automatic_wallpaper">Daily Wallpaper</string>
+    <string name="settings">Settings</string>
+    <string name="downloads">Downloads</string>
 </resources>

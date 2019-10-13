@@ -18,10 +18,14 @@ public class DailyJobService extends JobService {
     @Override
     public boolean onStartJob(JobParameters params) {
         AppUtils.scheduleJob(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(new Intent(this, DailyWallpaperService.class));
-        } else {
-            startService(new Intent(this, DailyWallpaperService.class));
+
+        if ((new SharedPrefsUtils(this))
+                .readSharedPrefsBoolean("daily_wallpaper", false)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                startForegroundService(new Intent(this, DailyWallpaperService.class));
+            } else {
+                startService(new Intent(this, DailyWallpaperService.class));
+            }
         }
         return false;
     }

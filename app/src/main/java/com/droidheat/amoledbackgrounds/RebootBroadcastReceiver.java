@@ -12,8 +12,6 @@ public class RebootBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
             AppUtils.scheduleJob(context);
-            DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
-            dailyWallpaperUtils.apply(context);
         }
     }
 }

@@ -14,17 +14,20 @@ public class AppUtils {
 
     // schedule the start of the service every 10 - 30 seconds
     public static void scheduleJob(Context context) {
-        ComponentName serviceComponent = new ComponentName(context, DailyJobService.class);
-        JobInfo.Builder builder = new JobInfo.Builder(5799435, serviceComponent);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            builder.setMinimumLatency(24 * 60 * 60 * 1000); // wait at least 1 day
-            builder.setOverrideDeadline(25 * 60 * 60 * 1000);
-        } else {
-            builder.setPeriodic(24 * 60 * 60 * 1000); // wait at least 1 day
+        if ((new SharedPrefsUtils(context))
+                .readSharedPrefsBoolean("daily_wallpaper", false)) {
+            ComponentName serviceComponent = new ComponentName(context, DailyJobService.class);
+            JobInfo.Builder builder = new JobInfo.Builder(5799435, serviceComponent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                builder.setMinimumLatency(24 * 60 * 60 * 1000); // wait at least 1 day
+                builder.setOverrideDeadline(25 * 60 * 60 * 1000);
+            } else {
+                builder.setPeriodic(24 * 60 * 60 * 1000); // wait at least 1 day
+            }
+            builder.setRequiresCharging(false); // we don't care if the device is charging or not
+            JobScheduler jobScheduler = context.getSystemService(JobScheduler.class);
+            jobScheduler.schedule(builder.build());
         }
-        builder.setRequiresCharging(false); // we don't care if the device is charging or not
-        JobScheduler jobScheduler = context.getSystemService(JobScheduler.class);
-        jobScheduler.schedule(builder.build());
     }
 
     public String validFileNameConvert(String string) {

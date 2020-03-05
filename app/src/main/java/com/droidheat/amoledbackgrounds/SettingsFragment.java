@@ -7,8 +7,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import  android.support.v4.app.Fragment;
-import android.support.v7.widget.SwitchCompat;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +30,7 @@ public class SettingsFragment extends Fragment {
     }
 
     int selectedSort;
+    int check = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,7 +66,7 @@ public class SettingsFragment extends Fragment {
         });
 
         // Spinner/Choose options
-        Spinner spinner = view.findViewById(R.id.options_spinner);
+        final Spinner spinner = view.findViewById(R.id.options_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.set_auto_sort_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,11 +75,13 @@ public class SettingsFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedSort = position;
-                new SharedPrefsUtils(getContext()).writeSharedPrefs("auto_sort", selectedSort);
-                if (new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("daily_wallpaper",false)) {
-                    DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
-                    dailyWallpaperUtils.applyAsync(getContext());
+                if (++check > 1) {
+                    selectedSort = position;
+                    new SharedPrefsUtils(getContext()).writeSharedPrefs("auto_sort", selectedSort);
+                    if (new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("daily_wallpaper", false)) {
+                        DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
+                        dailyWallpaperUtils.applyAsync(getContext());
+                    }
                 }
             }
 

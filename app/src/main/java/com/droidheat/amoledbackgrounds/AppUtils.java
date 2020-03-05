@@ -19,8 +19,8 @@ public class AppUtils {
             ComponentName serviceComponent = new ComponentName(context, DailyJobService.class);
             JobInfo.Builder builder = new JobInfo.Builder(5799435, serviceComponent);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                builder.setMinimumLatency(24 * 60 * 60 * 1000); // wait at least 1 day
-                builder.setOverrideDeadline(25 * 60 * 60 * 1000);
+                builder.setMinimumLatency(24 * 60 * 60 * 1000); // wait at least 1 day - 1440 mins
+                builder.setOverrideDeadline(49 * 30 * 60 * 1000); // wait 1470 mins
             } else {
                 builder.setPeriodic(24 * 60 * 60 * 1000); // wait at least 1 day
             }

@@ -13,18 +13,17 @@
     android:background="@color/colorDialogBackground">
 
     <TextView
+        android:id="@+id/text2121"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text2121"
-        android:text="Daily Wallpaper"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:maxLines="2"
-        android:textColor="@android:color/white"
         android:layout_toStartOf="@+id/ed_switch"
-        />
+        android:maxLines="2"
+        android:text="Daily Wallpaper (Beta)"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
-    <android.support.v7.widget.SwitchCompat
+    <androidx.appcompat.widget.SwitchCompat
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -32,15 +31,15 @@
         android:layout_marginStart="16dp"/>
 
     <TextView
+        android:id="@+id/text3241"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text2121"
-        android:text="@string/daily_wallpaper_dialog_instructions"
-        android:id="@+id/text3241"
-        android:textSize="16sp"
-        android:letterSpacing="0.006"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:letterSpacing="0.006"
+        android:text="@string/daily_wallpaper_dialog_instructions"
+        android:textSize="16sp" />
 
     <RelativeLayout
         android:id="@+id/relative23145"

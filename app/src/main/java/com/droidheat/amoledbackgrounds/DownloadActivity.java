@@ -18,16 +18,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.text.format.DateUtils;
-import android.transition.Visibility;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -236,8 +233,7 @@ public class DownloadActivity extends AppCompatActivity {
         ext = Objects.requireNonNull(wallpaper.get("image")).substring(Objects.requireNonNull(wallpaper.get("image")).lastIndexOf("."));
         ext.trim();
 
-        File direct = new File(Environment.getExternalStorageDirectory()
-                + "/AmoledBackgrounds/" + titleStr + ext);
+        File direct = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),titleStr+ext);
 
         if (direct.exists()) {
             isDownloaded = true;
@@ -348,12 +344,6 @@ public class DownloadActivity extends AppCompatActivity {
 
     public void file_download() {
         findViewById(R.id.download).setEnabled(false);
-        File direct = new File(Environment.getExternalStorageDirectory()
-                + "/AmoledBackgrounds");
-
-        if (!direct.exists()) {
-            direct.mkdirs();
-        }
 
         DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
 
@@ -366,8 +356,8 @@ public class DownloadActivity extends AppCompatActivity {
                         | DownloadManager.Request.NETWORK_MOBILE)
                 .setAllowedOverRoaming(false)
                 .setTitle(titleStr)
-                .setDescription("r/AmoledBackgrounds")
-                .setDestinationInExternalPublicDir("/AmoledBackgrounds", titleStr + ext)
+                .setDescription("AmoledBackgrounds")
+                .setDestinationInExternalFilesDir(this,Environment.DIRECTORY_PICTURES, titleStr + ext)
                 .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
                 .setAllowedOverRoaming(true)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
@@ -478,8 +468,7 @@ public class DownloadActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            File direct = new File(Environment.getExternalStorageDirectory()
-                    + "/AmoledBackgrounds/" + titleStr + ext);
+            File direct = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),titleStr+ext);
             WallpaperManager wallpaperManager = WallpaperManager.getInstance(DownloadActivity.this);
             try {
                 wallpaperManager.setBitmap(

@@ -48,7 +48,7 @@
     <string name="preference_file_key">key1</string>
     <string name="share">Share with Friends</string>
     <string name="rate_our_app_5">Rate Our App 5⭐</string>
-    <string name="daily_wallpaper_dialog_instructions">This feature runs daily at same time you enable this setting. Please choose your preferred sort for daily wallpaper -</string>
+    <string name="daily_wallpaper_dialog_instructions">This feature runs daily at same time you enable this setting. It is under full testing for reliability. Please choose your preferred sort for daily wallpaper -</string>
     <string name="automatic_wallpaper">Daily Wallpaper</string>
     <string name="settings">Settings</string>
     <string name="downloads">Downloads</string>

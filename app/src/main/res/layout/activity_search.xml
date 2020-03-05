@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:id="@+id/toolbar"
@@ -20,7 +20,7 @@
             android:inputType="text"
             android:hint="batman"
             android:focusableInTouchMode="true"/>
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:layout_width="match_parent"

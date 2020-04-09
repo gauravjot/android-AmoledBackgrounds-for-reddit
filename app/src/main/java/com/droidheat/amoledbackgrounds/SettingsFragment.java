@@ -39,7 +39,7 @@ public class SettingsFragment extends Fragment {
 
         selectedSort = new SharedPrefsUtils(getContext()).readSharedPrefsInt("auto_sort",-1);
 
-        // Switch
+        // Switch Daily Wallpaper
         SwitchCompat enable = view.findViewById(R.id.ed_switch);
         enable.setChecked(new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("daily_wallpaper",false));
         enable.setOnCheckedChangeListener(new SwitchCompat.OnCheckedChangeListener() {
@@ -91,6 +91,23 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        // Switch Lower Thumbnail Quality
+        SwitchCompat thumb = view.findViewById(R.id.low_wallpaper_quality_switch);
+        thumb.setChecked(new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("lower_thumbnail_quality",false));
+        thumb.setOnCheckedChangeListener(new SwitchCompat.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    (new SharedPrefsUtils(getContext()))
+                            .writeSharedPrefs("lower_thumbnail_quality", true);
+                } else {
+                    (new SharedPrefsUtils(getContext()))
+                            .writeSharedPrefs("lower_thumbnail_quality", false);
+                }
+            }
+        });
+
+        // Privacy Policy
         view.findViewById(R.id.privacy_policy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +116,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        // Changelog
         view.findViewById(R.id.changelog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -106,6 +124,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        // Version ID
         try {
             PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
             ((TextView) view.findViewById(R.id.version)).setText(pInfo.versionName);

@@ -27,7 +27,7 @@ public class DownloadsFragment extends Fragment {
 
     MyDownloadsAdapter myDownloadsAdapter;
     GridView gridView;
-    final private int MY_PERMISSIONS_REQUEST =621;
+    final private int MY_PERMISSIONS_REQUEST = 621;
     Button permissionBtn;
 
     @Override
@@ -45,9 +45,10 @@ public class DownloadsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(
-                            new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
                             MY_PERMISSIONS_REQUEST);
                 } else {
                     permissionBtn.setVisibility(View.INVISIBLE);
@@ -56,9 +57,10 @@ public class DownloadsFragment extends Fragment {
         });
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
                 != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(
-                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE},
                     MY_PERMISSIONS_REQUEST);
         } else {
             permissionBtn.setVisibility(View.INVISIBLE);

@@ -2,37 +2,32 @@ package com.droidheat.amoledbackgrounds;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
-import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
+
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
-import java.util.Objects;
 
 class DailyWallpaperUtils {
+
+    private final static String SERVICE_NAME = "DailyWallpaperUtils";
 
     DailyWallpaperUtils() {
     }
 
-    static File EXTERNAL_FILES_DIR;
 
     void applyAsync(Context context) {
         if (new SharedPrefsUtils(context).readSharedPrefsBoolean("daily_wallpaper", false)) {
-            EXTERNAL_FILES_DIR = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
             (new GrabItemsAsyncTask(context)).execute();
         }
     }
@@ -51,7 +46,6 @@ class DailyWallpaperUtils {
 
         GrabItemsAsyncTask(Context context) {
             this.wContext = new WeakReference<>(context);
-            Log.d("DailyJobService", "Util ran");
         }
 
         @Override
@@ -65,7 +59,7 @@ class DailyWallpaperUtils {
             }
             String url = "https://www.reddit.com/r/Amoledbackgrounds/" + sort;
             Context context = wContext.get();
-            result = (new UtilsJSON()).grabPostsAsArrayList(url.trim()).get(0);
+            result = (new UtilsJSON()).grabPostsAsArrayList(context,url.trim()).get(0);
             return context;
         }
 
@@ -74,26 +68,20 @@ class DailyWallpaperUtils {
         protected void onPostExecute(Context context) {
             if (this.result != null && !this.result.isEmpty()) {
                 HashMap<String, String> wallpaper = this.result;
-                titleStr = Objects.requireNonNull(wallpaper.get("title")).replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
-                        .replaceAll("\\{[^}]*\\}", "");
-                titleStr = titleStr.replaceAll("\\u00A0", " ").trim();
-                titleStr = titleStr.replaceAll(" ", "_") + "_" + wallpaper.get("name");
-                titleStr = titleStr.substring(0, Math.min(titleStr.length(), 50));
-                titleStr = (new AppUtils()).validFileNameConvert(titleStr);
-                ext = Objects.requireNonNull(wallpaper.get("image")).substring(Objects.requireNonNull(wallpaper.get("image")).lastIndexOf("."));
-                ext.trim();
-                final int wWidth = Integer.parseInt(Objects.requireNonNull(wallpaper.get("width")));
-                final int wHeight = Integer.parseInt(Objects.requireNonNull(wallpaper.get("height")));
+
+                titleStr = (new FunctionUtils()).purifyRedditFileTitle(
+                        wallpaper.get("title"),
+                        wallpaper.get("name"));
+                ext = (new FunctionUtils()).purifyRedditFileExtension(wallpaper.get("image"));
 
 
-                File file = new File(EXTERNAL_FILES_DIR, titleStr + ext);
-                Log.d("Location",EXTERNAL_FILES_DIR.getAbsolutePath() + "/" + titleStr + ext);
+                String filePath =(new FunctionUtils()).getFilePath(context, titleStr + ext);
+                File file = new File(filePath);
                 if (file.exists()) {
                     SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask(context);
-                    setWallpaperAsyncTask.execute(titleStr,ext,wWidth+"",wHeight+"");
+                    setWallpaperAsyncTask.execute(titleStr,ext);
                     return;
                 }
-                Log.d("DailyWallpaperUtils", "Wallpaper ran 1" + wallpaper.get("image"));
 
                 final DownloadManager mgr = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
 
@@ -107,7 +95,7 @@ class DailyWallpaperUtils {
                         .setAllowedOverRoaming(false)
                         .setTitle(titleStr)
                         .setDescription("AmoledBackgrounds")
-                        .setDestinationInExternalFilesDir(context,Environment.DIRECTORY_PICTURES, titleStr + ext)
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, titleStr + ext)
                         .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
                         .setAllowedOverRoaming(true)
                         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
@@ -120,19 +108,21 @@ class DailyWallpaperUtils {
                             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                             if (downloadID == id) {
                                 context.unregisterReceiver(this);
+                                //AppUtils.saveToMediaStore(context,titleStr + ext);
                                 SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask(context);
-                                setWallpaperAsyncTask.execute(titleStr,ext,wWidth+"",wHeight+"");
+                                setWallpaperAsyncTask.execute(titleStr,ext);
                             }
                         }
                     }
                 };
 
                 try {
-                    downloadID = mgr.enqueue(request);
                     context.registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+                    downloadID = mgr.enqueue(request);
+                    Log.d(SERVICE_NAME, "Requested service to start a new download");
                 } catch (Exception e) {
-                    Log.d("DailyWallpaperUtils", e.getMessage());
-                    Toast.makeText(context, "Unable to download Daily Wallpaper (AmoledBackgrounds)", Toast.LENGTH_LONG).show();
+                    Log.d(SERVICE_NAME, "Problem making download request. Ending with failure...");
+                    Toast.makeText(context, "Error: Unable to download daily wallpaper from Reddit", Toast.LENGTH_LONG).show();
                 }
             }
         }
@@ -143,56 +133,30 @@ class DailyWallpaperUtils {
         }
     }
 
-
-    private static Bitmap decodeFile(File f, int WIDTH, int HIGHT) {
-        try {
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            //The new size we want to scale to
-            //Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= WIDTH && o.outHeight / scale / 2 >= HIGHT)
-                scale *= 2;
-
-            //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException ignored) {
-        }
-        return null;
-    }
-
     static class SetWallpaperAsyncTask extends AsyncTask<String, Integer, String> {
 
-        Context context;
+
+        private WeakReference<Context> wContext;
         SetWallpaperAsyncTask(Context context) {
-            this.context = context;
+            this.wContext = new WeakReference<>(context);
         }
+
         @Override
         protected String doInBackground(String... strings) {
-            File direct = new File(EXTERNAL_FILES_DIR,strings[0] + strings[1]);
-            Log.d("Location/Service",Environment.DIRECTORY_PICTURES + "/" + strings[0] + strings[1]);
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
-            try {
-                wallpaperManager.setBitmap(
-                        decodeFile(
-                                direct,
-                                Integer.parseInt(Objects.requireNonNull(strings[2])),
-                                Integer.parseInt(Objects.requireNonNull(strings[3]))
-                        )
-                );
-            } catch (Exception e) {
-                Log.d("DailyWallpaperUtils","unable to set wallpaper");
-            }
-            return null;
+            return (new FunctionUtils())
+                    .changeWallpaper(
+                            wContext.get(),
+                            (new FunctionUtils()).getFilePath(wContext.get(), strings[0] + strings[1])
+                    );
         }
 
         @Override
         protected void onPostExecute(String s) {
+            if (s == "success") {
+                Log.d(SERVICE_NAME,"Wallpaper is set with success.");
+            } else {
+                Log.d(SERVICE_NAME, "A failure has occurred while setting wallpaper.");
+            }
         }
     }
 

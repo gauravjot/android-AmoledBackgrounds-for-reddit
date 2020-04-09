@@ -178,7 +178,7 @@ public class WallpaperFragment extends Fragment {
         protected Double doInBackground(String... params) {
             currentString = params[0];
             String url = "https://www.reddit.com/r/Amoledbackgrounds/" + currentString;
-            arrayList = (new UtilsJSON()).grabPostsAsArrayList(url.trim());
+            arrayList = (new UtilsJSON()).grabPostsAsArrayList(getContext(), url.trim());
             return null;
         }
 

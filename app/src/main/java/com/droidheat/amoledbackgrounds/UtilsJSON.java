@@ -1,5 +1,6 @@
 package com.droidheat.amoledbackgrounds;
 
+import android.content.Context;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -16,7 +17,7 @@ import java.util.Scanner;
 
 public class UtilsJSON {
 
-    public ArrayList<HashMap<String,String>> grabPostsAsArrayList(String url) {
+    public ArrayList<HashMap<String,String>> grabPostsAsArrayList(Context context, String url) {
         ArrayList<HashMap<String,String>> arrayList = new ArrayList<>();
 
         try {
@@ -49,10 +50,22 @@ public class UtilsJSON {
                             int len = dataObject.getJSONObject("preview")
                                     .getJSONArray("images").getJSONObject(0)
                                     .getJSONArray("resolutions").length();
-                            JSONObject previewObject = dataObject.getJSONObject("preview")
-                                    .getJSONArray("images").getJSONObject(0)
-                                    .getJSONArray("resolutions").getJSONObject(len - 2);
-                            hashMap.put("preview",previewObject.getString("url").replaceAll("&amp;","&"));
+                            if (!(new SharedPrefsUtils(context)).readSharedPrefsBoolean("lower_thumbnail_quality",false)) {
+                                JSONObject previewObject = dataObject.getJSONObject("preview")
+                                        .getJSONArray("images").getJSONObject(0)
+                                        .getJSONArray("resolutions").getJSONObject(len - 3);
+                                hashMap.put("preview",previewObject.getString("url").replaceAll("&amp;","&"));
+                            } else {
+                                int i_n = 4;
+                                if (len > 4) {
+                                    i_n = 5;
+                                }
+
+                                JSONObject previewObject = dataObject.getJSONObject("preview")
+                                        .getJSONArray("images").getJSONObject(0)
+                                        .getJSONArray("resolutions").getJSONObject(len - i_n);
+                                hashMap.put("preview",previewObject.getString("url").replaceAll("&amp;","&"));
+                            }
                         } catch (Exception e) {
                             hashMap.put("preview",dataObject.getString("url"));
                             e.printStackTrace();}
@@ -99,7 +112,7 @@ public class UtilsJSON {
                 JSONArray fileArray = new JSONArray(html.trim());
                 fileArray.remove(0);
 
-                JSONArray commentArray = fileArray.getJSONObject(fileArray.length() - 1).getJSONObject("data")
+                JSONArray commentArray = fileArray.getJSONObject(0).getJSONObject("data")
                         .getJSONArray("children");
 
                 for (int i=0; i < commentArray.length(); i++) {

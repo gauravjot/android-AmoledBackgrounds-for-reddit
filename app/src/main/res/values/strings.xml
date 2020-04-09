@@ -8,12 +8,15 @@
         <!--☑ We have switched to more optimized resolution for wallpaper preview, so app will now use less data than before \n-->
         <!--☑ Several UI tweaks\n-->
         <!--\n-->
+        \n
+        ☑ Issue with appearing in Gallery is fixed for wallpapers downloaded from here on.\n
+        ☑ Added an option in settings to lower thumbnail quality.\n
         ☑ Stability update to resolve random crashes on newer versions of Android.\n\n\n
         IMPORTANT!!
-        \n\nDue to Android 10 security changes the directory in which wallpapers download has been changed to /Android/data/com.droidheat.amoledbackgrounds/files/Pictures/.
-        \n\nIf you ever uninstall the app, Android will also delete the wallpapers. To prevent deletion, please move the wallpapers manually to a safe location.
-        \n\nFor Android 9 users or below you still have wallpapers in AmoledBackgrounds folder (old location) but new wallpapers will be downloaded to updated location mentioned earlier.
-        \n\nThank you for understanding!
+        \n\nThe directory is now changed to /Pictures in your internal storage.
+        \n\nIf you cannot find previously downloaded wallpaper then check
+        \n - /Android/data/com.droidheat.amoledbackgrounds/files/Pictures
+        \n - /AmoledBackgrounds.
         <!--\n-->
         <!--Don\'t forget to rate us 5⭐ on play store!-->
     </string>

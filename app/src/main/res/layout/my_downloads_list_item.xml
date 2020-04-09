@@ -15,17 +15,32 @@
         <TextView
             android:id="@+id/title"
             android:layout_alignParentBottom="true"
-            android:layout_width="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/options"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="8dp"
             android:textSize="16sp"
             android:textStyle="bold"
+            android:layout_marginEnd="6dp"
             android:maxLines="2"
-            android:text="asdfasdsadasdasdas sadasd asd asdasd asd asdas dasdasdas"
+            android:text="asdfasdsadasdasdas sadasd asd asdasd asd asdas jdsfdasdasdas"
             android:ellipsize="marquee"
             android:textColor="@android:color/white"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:id="@+id/options"
+            android:src="@drawable/ic_dot_more_vert_black_24dp"
+            android:paddingStart="6dp"
+            android:paddingEnd="6dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/title"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
             />
 
         <RelativeLayout

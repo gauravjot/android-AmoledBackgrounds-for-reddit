@@ -130,7 +130,7 @@ public class SearchActivity extends AppCompatActivity {
             }
 
             String url = "https://www.reddit.com/r/Amoledbackgrounds/search.json?q=" + query + "&restrict_sr=1";
-            arrayList = (new UtilsJSON()).grabPostsAsArrayList(url.trim());
+            arrayList = (new UtilsJSON()).grabPostsAsArrayList(getBaseContext(), url.trim());
             return null;
         }
 

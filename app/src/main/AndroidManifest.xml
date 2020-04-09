@@ -70,8 +70,8 @@
         </activity>
 
         <provider
-            android:name=".GenericFileProvider"
-            android:authorities="${applicationId}.fileprovider"
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

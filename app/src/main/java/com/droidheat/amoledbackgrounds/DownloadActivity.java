@@ -12,6 +12,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -25,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -37,6 +39,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher;
 
+import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -119,10 +122,6 @@ public class DownloadActivity extends AppCompatActivity {
 
         progressBar = findViewById(R.id.progress_circular);
         progressBar.setVisibility(View.INVISIBLE);
-        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
-        alertDialogBuilder.setCancelable(true);
-        alertDialogBuilder.setMessage("Downloading");
-        alertDialog = alertDialogBuilder.create();
 
         commentsWebView = findViewById(R.id.webView);
         commentsWebView.getSettings();
@@ -152,7 +151,6 @@ public class DownloadActivity extends AppCompatActivity {
         ImageView preview = findViewById(R.id.fullscreen_image);
         Picasso.get().load(wallpaper.get("image")).resize(1440, 2560).centerCrop().into(preview);
 
-        registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         imageSwitcher = findViewById(R.id.download);
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
             public View makeView() {
@@ -199,13 +197,16 @@ public class DownloadActivity extends AppCompatActivity {
             }
         });
 
-        titleStr = Objects.requireNonNull(wallpaper.get("title")).replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
+        titleStr = (new FunctionUtils()).purifyRedditFileTitle(
+                wallpaper.get("title"),
+                wallpaper.get("name")
+        );
+        ext = (new FunctionUtils()).purifyRedditFileExtension(wallpaper.get("image"));
+
+        String post_title = Objects.requireNonNull(wallpaper.get("title")).replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
                 .replaceAll("\\{[^}]*\\}", "");
-        titleStr = titleStr.replaceAll("\\u00A0", " ").trim();
-        String post_title = titleStr;
-        titleStr = titleStr.replaceAll(" ", "_") + "_" + wallpaper.get("name");
-        titleStr = titleStr.substring(0, Math.min(titleStr.length(), 50));
-        titleStr = (new AppUtils()).validFileNameConvert(titleStr);
+        post_title = post_title.replaceAll("\\u00A0", " ").trim();
+
         title.setText(post_title.replaceAll("-","").replaceAll("&amp;", "&").trim());
         author.setText(String.format("u/%s", wallpaper.get("author")));
         if (!Objects.equals(wallpaper.get("flair"), "null")) {
@@ -230,16 +231,20 @@ public class DownloadActivity extends AppCompatActivity {
             }
         });
 
-        ext = Objects.requireNonNull(wallpaper.get("image")).substring(Objects.requireNonNull(wallpaper.get("image")).lastIndexOf("."));
-        ext.trim();
-
-        File direct = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),titleStr+ext);
+        File direct = new File((new FunctionUtils()).getFilePath(this, titleStr + ext));
 
         if (direct.exists()) {
             isDownloaded = true;
             imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
         }
 
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setCancelable(false);
+        alertDialogBuilder.setMessage(post_title);
+        alertDialogBuilder.setTitle("Downloading");
+        alertDialog = alertDialogBuilder.create();
+
+        registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
         imageSwitcher.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -299,27 +304,6 @@ public class DownloadActivity extends AppCompatActivity {
         findViewById(R.id.commentsView).setVisibility(View.INVISIBLE);
     }
 
-    public static Bitmap decodeFile(File f, int WIDTH, int HIGHT) {
-        try {
-            //Decode image size
-            BitmapFactory.Options o = new BitmapFactory.Options();
-            o.inJustDecodeBounds = true;
-            BitmapFactory.decodeStream(new FileInputStream(f), null, o);
-
-            //The new size we want to scale to
-            //Find the correct scale value. It should be the power of 2.
-            int scale = 1;
-            while (o.outWidth / scale / 2 >= WIDTH && o.outHeight / scale / 2 >= HIGHT)
-                scale *= 2;
-
-            //Decode with inSampleSize
-            BitmapFactory.Options o2 = new BitmapFactory.Options();
-            o2.inSampleSize = scale;
-            return BitmapFactory.decodeStream(new FileInputStream(f), null, o2);
-        } catch (FileNotFoundException ignored) {
-        }
-        return null;
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
@@ -357,7 +341,7 @@ public class DownloadActivity extends AppCompatActivity {
                 .setAllowedOverRoaming(false)
                 .setTitle(titleStr)
                 .setDescription("AmoledBackgrounds")
-                .setDestinationInExternalFilesDir(this,Environment.DIRECTORY_PICTURES, titleStr + ext)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, titleStr + ext)
                 .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
                 .setAllowedOverRoaming(true)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
@@ -393,6 +377,7 @@ public class DownloadActivity extends AppCompatActivity {
                 progressBar.setVisibility(View.INVISIBLE);
                 imageSwitcher.setVisibility(View.VISIBLE);
                 imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
+                //AppUtils.saveToMediaStore(context,titleStr + ext);
             }
             alertDialog.dismiss();
         }
@@ -468,28 +453,23 @@ public class DownloadActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            File direct = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES),titleStr+ext);
-            WallpaperManager wallpaperManager = WallpaperManager.getInstance(DownloadActivity.this);
-            try {
-                wallpaperManager.setBitmap(
-                        decodeFile(
-                                direct,
-                                Integer.parseInt(Objects.requireNonNull(wallpaper.get("width"))),
-                                Integer.parseInt(Objects.requireNonNull(wallpaper.get("height")))
-                        )
-                );
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return null;
+            return (new FunctionUtils()).changeWallpaper(
+                    getBaseContext(),
+                    (new FunctionUtils()).getFilePath(getBaseContext(),titleStr + ext)
+            );
         }
 
         @Override
         protected void onPostExecute(String s) {
-            Toast.makeText(getApplicationContext(), "Wallpaper set!", Toast.LENGTH_SHORT).show();
             imageSwitcher.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
-            imageSwitcher.setImageResource(R.drawable.ic_check_black_24dp);
+            if (s == "success") {
+                Toast.makeText(getApplicationContext(), "Wallpaper set!", Toast.LENGTH_SHORT).show();
+                imageSwitcher.setImageResource(R.drawable.ic_check_black_24dp);
+            } else {
+                Toast.makeText(getApplicationContext(), "Failed to set wallpaper.", Toast.LENGTH_SHORT).show();
+                imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
+            }
         }
     }
 
@@ -574,7 +554,8 @@ public class DownloadActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                commentsWebView.loadData(result, "text/html", "UTF-8");
+                //commentsWebView.loadData(result, "text/html", "UTF-8");
+                commentsWebView.loadDataWithBaseURL(null,result,null,"UTF-8",null);
             }
         }
 

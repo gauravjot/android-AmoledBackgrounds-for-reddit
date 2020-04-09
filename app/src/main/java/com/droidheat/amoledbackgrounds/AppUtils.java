@@ -1,6 +1,8 @@
 package com.droidheat.amoledbackgrounds;
 
 import android.app.AlertDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageInfo;
@@ -8,7 +10,13 @@ import android.content.pm.PackageManager;
 import android.app.job.JobInfo;
 import android.app.job.JobScheduler;
 import android.content.ComponentName;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
+
+import androidx.annotation.NonNull;
 
 public class AppUtils {
 
@@ -30,10 +38,7 @@ public class AppUtils {
         }
     }
 
-    public String validFileNameConvert(String string) {
-        String newS = string.replaceAll("[\\\\/:*?\"<>|]", "");
-        return newS.replace(".","").replaceAll("%","");
-    }
+
 
     public AlertDialog changelog(Context context) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -54,5 +59,28 @@ public class AppUtils {
 
         return builder.create();
     }
+//
+//
+//    public static void saveToMediaStore(@NonNull final Context context, @NonNull final String displayName) {
+//        final String relativeLocation = Environment.DIRECTORY_PICTURES;
+//
+//        final ContentValues contentValues = new ContentValues();
+//        contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, displayName);
+//        contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+//        contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, relativeLocation);
+//
+//        final ContentResolver resolver = context.getContentResolver();
+//
+//        try
+//        {
+//            final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+//            resolver.insert(contentUri, contentValues);
+//        }
+//        catch (Exception e)
+//        {
+//            Log.d("MediaStore","Unable to make an entry");
+//        }
+//
+//    }
 
 }

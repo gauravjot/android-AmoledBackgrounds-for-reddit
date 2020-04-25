@@ -191,7 +191,7 @@ public class DailyWallpaperService extends Service {
         protected String doInBackground(String... strings) {
             Log.d(SERVICE_NAME,"Applying Wallpaper...");
             return (new FunctionUtils()).changeWallpaper(context,
-                    item.get("title") + item.get("ext"));
+                    (new FunctionUtils()).getFilePath(context,item.get("title") + item.get("ext")));
         }
 
         @Override

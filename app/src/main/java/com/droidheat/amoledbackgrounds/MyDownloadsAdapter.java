@@ -1,7 +1,6 @@
 package com.droidheat.amoledbackgrounds;
 
 import android.Manifest;
-import android.app.WallpaperManager;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -9,14 +8,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,16 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.app.ShareCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -59,6 +51,26 @@ public class MyDownloadsAdapter extends BaseAdapter {
         } else {
             arrayList = new ArrayList<>(getItems());
         }
+    }
+
+    private ArrayList<HashMap<String,String>> getItemsLegacy() {
+        ArrayList<HashMap<String,String>> result = new ArrayList<>(); //ArrayList cause you don't know how many files there is
+
+        try {
+            File folder = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES); //This is just to cast to a File type since you pass it as a String
+            File[] filesInFolder = folder.listFiles(); // This returns all the folders and files in your path
+            for (File file : filesInFolder) { //For each of the entries do:
+                if (!file.isDirectory()) { //check that it's not a dir
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("title", file.getName());
+                    hashMap.put("path", file.getPath());
+                    hashMap.put("uri", file.toURI().toString());
+                    result.add(hashMap);
+                }
+            }
+            Collections.reverse(result);
+        } catch (Exception ignore) {}
+        return result;
     }
 
     private ArrayList<HashMap<String, String>> getItems() {
@@ -133,6 +145,7 @@ public class MyDownloadsAdapter extends BaseAdapter {
             }
         }
         Collections.reverse(result);
+        result.addAll(getItemsLegacy());
         return result;
     }
 

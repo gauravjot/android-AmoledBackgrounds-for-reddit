@@ -9,10 +9,11 @@
         <!--☑ Several UI tweaks\n-->
         <!--\n-->
         \n
-        ☑ Issue with appearing in Gallery is fixed for wallpapers downloaded from here on.\n
-        ☑ Added an option in settings to lower thumbnail quality.\n
-        ☑ Stability update to resolve random crashes on newer versions of Android.\n\n\n
+        ☑ Fixed a bug where daily wallpaper was not working.\n\n\n
         IMPORTANT!!
+        \n\nPlease provide feedback by emailing droidheat@gmail.com if there is any issue.
+        \n\n\n
+        OLD!!
         \n\nThe directory is now changed to /Pictures in your internal storage.
         \n\nIf you cannot find previously downloaded wallpaper then check
         \n - /Android/data/com.droidheat.amoledbackgrounds/files/Pictures

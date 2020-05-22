@@ -6,8 +6,8 @@ android {
         applicationId "com.droidheat.amoledbackgrounds"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 19
-        versionName "1.2.6b"
+        versionCode 20
+        versionName "1.2.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

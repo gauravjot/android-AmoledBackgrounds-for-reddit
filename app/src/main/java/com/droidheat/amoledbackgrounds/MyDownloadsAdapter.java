@@ -145,7 +145,8 @@ public class MyDownloadsAdapter extends BaseAdapter {
             }
         }
         Collections.reverse(result);
-        result.addAll(getItemsLegacy());
+        // TODO: Check if legacy wallpapers will apply
+        //result.addAll(getItemsLegacy());
         return result;
     }
 

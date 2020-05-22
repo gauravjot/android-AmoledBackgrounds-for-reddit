@@ -9,15 +9,14 @@
         <!--☑ Several UI tweaks\n-->
         <!--\n-->
         \n
-        ☑ Fixed a bug where daily wallpaper was not working.\n\n\n
-        IMPORTANT!!
-        \n\nPlease provide feedback by emailing droidheat@gmail.com if there is any issue.
-        \n\n\n
-        OLD!!
-        \n\nThe directory is now changed to /Pictures in your internal storage.
+        ☑ Fixed a bug where daily wallpaper was not working.
+        \n\n
+        NOTE!
+        \n\nThe directory used by app is now /Pictures in your internal storage.
         \n\nIf you cannot find previously downloaded wallpaper then check
         \n - /Android/data/com.droidheat.amoledbackgrounds/files/Pictures
-        \n - /AmoledBackgrounds.
+        \n - /AmoledBackgrounds
+        \n\nPlease provide feedback by emailing droidheat@gmail.com if there is any issue.
         <!--\n-->
         <!--Don\'t forget to rate us 5⭐ on play store!-->
     </string>

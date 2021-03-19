@@ -24,8 +24,13 @@
         app:showAsAction="never"/>
 
     <item
-        android:title="@string/r_amoledbackgrounds"
-        android:id="@+id/action_subreddit"
+        android:title="dev: Droidheat"
+        android:id="@+id/action_droidheat"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="☕  Get me a coffee "
+        android:id="@+id/action_coffee"
         app:showAsAction="never"/>
 
 </menu>

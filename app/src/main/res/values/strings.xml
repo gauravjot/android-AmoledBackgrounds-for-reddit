@@ -9,17 +9,9 @@
         <!--☑ Several UI tweaks\n-->
         <!--\n-->
         \n
-        ☑ Fixed a bug where daily wallpaper was not working.\n\n\n
-        IMPORTANT!!
-        \n\nPlease provide feedback by emailing droidheat@gmail.com if there is any issue.
-        \n\n\n
-        OLD!!
-        \n\nThe directory is now changed to /Pictures in your internal storage.
-        \n\nIf you cannot find previously downloaded wallpaper then check
-        \n - /Android/data/com.droidheat.amoledbackgrounds/files/Pictures
-        \n - /AmoledBackgrounds.
-        <!--\n-->
-        <!--Don\'t forget to rate us 5⭐ on play store!-->
+        ☑ Possibly fixed wallpapers being deleted after few weeks. If issue still persists, please let me know!\n
+        \n
+        Don\'t forget to rate us 5⭐ on play store!
     </string>
 
 
@@ -56,7 +48,7 @@
     <string name="play_store_url">https://play.google.com/store/apps/details?id=com.droidheat.amoledbackgrounds</string>
     <string name="preference_file_key">key1</string>
     <string name="share">Share with Friends</string>
-    <string name="rate_our_app_5">Rate Our App 5⭐</string>
+    <string name="rate_our_app_5">Rate app on Play Store</string>
     <string name="daily_wallpaper_dialog_instructions">This feature runs daily at same time you enable this setting. It is under full testing for reliability. Please choose your preferred sort for daily wallpaper -</string>
     <string name="automatic_wallpaper">Daily Wallpaper</string>
     <string name="settings">Settings</string>

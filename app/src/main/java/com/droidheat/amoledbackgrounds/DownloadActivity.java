@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.app.WallpaperManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -16,6 +17,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
@@ -25,6 +27,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.View;
@@ -46,6 +49,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.FileSystem;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -341,7 +347,7 @@ public class DownloadActivity extends AppCompatActivity {
                 .setAllowedOverRoaming(false)
                 .setTitle(titleStr)
                 .setDescription("AmoledBackgrounds")
-                .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, titleStr + ext)
+                .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, titleStr + ".download")
                 .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
                 .setAllowedOverRoaming(true)
                 .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
@@ -371,13 +377,33 @@ public class DownloadActivity extends AppCompatActivity {
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             //Checking if the received broadcast is for our enqueued download by matching download id
             if (downloadID == id) {
-                Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();
-                isDownloaded = true;
+                File from = new File((new FunctionUtils()).getFilePath(getBaseContext(),titleStr + ".download"));
+                try {
+                    Files.move(from.toPath(),from.toPath().resolveSibling(titleStr + ext));
+                    Log.d("renaming after download: ","success");
+                    ContentValues values = new ContentValues();
+                    values.put(MediaStore.MediaColumns.DATA, (new FunctionUtils()).getFilePath(getBaseContext(),titleStr + ext));
+                    boolean successMediaStore = context.getContentResolver().update(
+                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
+                    MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;
+                    if (successMediaStore) {
+                        Log.d("mediastore: ","success");
+                        Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();
+                        isDownloaded = true;
+                        imageSwitcher.setVisibility(View.VISIBLE);
+                        imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
+                        //AppUtils.saveToMediaStore(context,titleStr + ext);
+                    } else {
+                        Log.d("mediastore: ","failed");
+                    }
+                } catch (IOException e) {
+                    Log.d("renaming after download: ","failed");
+                    Toast.makeText(DownloadActivity.this, "Downloading errored!", Toast.LENGTH_SHORT).show();
+                    isDownloaded = false;
+                    e.printStackTrace();
+                }
                 findViewById(R.id.download).setEnabled(true);
                 progressBar.setVisibility(View.INVISIBLE);
-                imageSwitcher.setVisibility(View.VISIBLE);
-                imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
-                //AppUtils.saveToMediaStore(context,titleStr + ext);
             }
             alertDialog.dismiss();
         }

@@ -28,7 +28,7 @@ public class FunctionUtils {
                 != PackageManager.PERMISSION_GRANTED) {
             Log.d("Permission error","Read permission is not granted");
         } else {
-            Log.d("Permission error","Read permission is granted");
+            Log.d("Permission","Read permission is granted");
         }
 
         WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
@@ -36,17 +36,19 @@ public class FunctionUtils {
         if (bitmap != null) {
             try {
                 wallpaperManager.setBitmap(bitmap);
+                Log.d("wallpaper","wallpaper changed");
                 return "success";
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        } else {
+            Log.d("error","bitmap is null "+pathOfNewWallpaper);
         }
         return "failure";
     }
 
     public String getFilePath(Context context, String fileName) {
         String path = "/storage/emulated/0/Pictures";
-        Log.d("PATH",path);
         return path + "/" + fileName;
     }
 

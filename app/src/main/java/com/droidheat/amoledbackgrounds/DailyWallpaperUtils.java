@@ -3,19 +3,23 @@ package com.droidheat.amoledbackgrounds;
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.nio.file.Files;
 import java.util.HashMap;
 
 class DailyWallpaperUtils {
@@ -95,7 +99,7 @@ class DailyWallpaperUtils {
                         .setAllowedOverRoaming(false)
                         .setTitle(titleStr)
                         .setDescription("AmoledBackgrounds")
-                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, titleStr + ext)
+                        .setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES, titleStr + ".download")
                         .setAllowedOverMetered(true)// Set if download is allowed on Mobile network
                         .setAllowedOverRoaming(true)
                         .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE);
@@ -108,9 +112,26 @@ class DailyWallpaperUtils {
                             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
                             if (downloadID == id) {
                                 context.unregisterReceiver(this);
+                                File from = new File((new FunctionUtils()).getFilePath(context,titleStr + ".download"));
+                                try {
+                                    Files.move(from.toPath(),from.toPath().resolveSibling(titleStr + ext));
+                                    Log.d("renaming after download: ","success");
+                                    ContentValues values = new ContentValues();
+                                    values.put(MediaStore.MediaColumns.DATA, (new FunctionUtils()).getFilePath(context,titleStr + ext));
+                                    boolean successMediaStore = context.getContentResolver().update(
+                                            MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
+                                            MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;
+                                    if (successMediaStore) {
+                                        SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask(context);
+                                        setWallpaperAsyncTask.execute(titleStr,ext);
+                                    } else {
+                                        Log.d("mediastore: ", "failed");
+                                    }
+                                } catch (IOException e) {
+                                    Log.d("renaming after download: ","failed");
+                                    e.printStackTrace();
+                                }
                                 //AppUtils.saveToMediaStore(context,titleStr + ext);
-                                SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask(context);
-                                setWallpaperAsyncTask.execute(titleStr,ext);
                             }
                         }
                     }

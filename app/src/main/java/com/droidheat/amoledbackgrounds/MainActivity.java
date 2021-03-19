@@ -154,8 +154,11 @@ public class MainActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.action_rate) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(this.getString(R.string.play_store_url)));
             startActivity(browserIntent);
-        } else if (item.getItemId() == R.id.action_subreddit) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://reddit.com/r/AmoledBackgrounds"));
+        } else if (item.getItemId() == R.id.action_droidheat) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.com"));
+            startActivity(browserIntent);
+        } else if (item.getItemId() == R.id.action_coffee) {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.com/get_me_a_coffee.html"));
             startActivity(browserIntent);
         } else if (item.getItemId() == R.id.action_share) {
             Intent sendIntent = new Intent();

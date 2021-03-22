@@ -388,14 +388,14 @@ public class DownloadActivity extends AppCompatActivity {
                     MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;
                     if (successMediaStore) {
                         Log.d("mediastore: ","success");
-                        Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();
-                        isDownloaded = true;
-                        imageSwitcher.setVisibility(View.VISIBLE);
-                        imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
-                        //AppUtils.saveToMediaStore(context,titleStr + ext);
                     } else {
                         Log.d("mediastore: ","failed");
                     }
+                    Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();
+                    isDownloaded = true;
+                    imageSwitcher.setVisibility(View.VISIBLE);
+                    imageSwitcher.setImageResource(R.drawable.ic_wallpaper_black_24dp);
+                    //AppUtils.saveToMediaStore(context,titleStr + ext);
                 } catch (IOException e) {
                     Log.d("renaming after download: ","failed");
                     Toast.makeText(DownloadActivity.this, "Downloading errored!", Toast.LENGTH_SHORT).show();

@@ -28,9 +28,4 @@
         android:id="@+id/action_droidheat"
         app:showAsAction="never"/>
 
-    <item
-        android:title="☕  Get me a coffee "
-        android:id="@+id/action_coffee"
-        app:showAsAction="never"/>
-
 </menu>

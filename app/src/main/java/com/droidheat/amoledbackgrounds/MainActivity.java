@@ -157,9 +157,6 @@ public class MainActivity extends AppCompatActivity {
         } else if (item.getItemId() == R.id.action_droidheat) {
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.com"));
             startActivity(browserIntent);
-        } else if (item.getItemId() == R.id.action_coffee) {
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.com/get_me_a_coffee.html"));
-            startActivity(browserIntent);
         } else if (item.getItemId() == R.id.action_share) {
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);

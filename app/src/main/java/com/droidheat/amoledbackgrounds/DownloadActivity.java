@@ -20,6 +20,7 @@ import android.graphics.Color;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Environment;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -390,6 +391,15 @@ public class DownloadActivity extends AppCompatActivity {
                         Log.d("mediastore: ","success");
                     } else {
                         Log.d("mediastore: ","failed");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+
+                            ContentValues mvalues = new ContentValues();
+                            mvalues.put(MediaStore.Images.Media.DISPLAY_NAME, titleStr + ext);
+                            mvalues.put(MediaStore.Images.Media.MIME_TYPE, "image/" + ext.replace(".",""));
+                            mvalues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
+                            getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                            Log.d("mediastore: ","trying saving via special method on android Q or higher");
+                        }
                     }
                     Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();
                     isDownloaded = true;

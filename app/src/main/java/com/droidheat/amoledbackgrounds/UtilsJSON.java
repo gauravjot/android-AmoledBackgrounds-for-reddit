@@ -39,12 +39,18 @@ public class UtilsJSON {
 
                     // Filtering out posts with images and bad flairs
                     if (
-                           (mURl.substring(mURl.lastIndexOf(".") + 1).equals("png") ||
-                            mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpg") ||
-                            mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpeg")) &&
-                            !flair.toUpperCase().contains("META") &&
-                            !flair.toUpperCase().contains("PSA")
-                      ) {
+                        (mURl.substring(mURl.lastIndexOf(".") + 1).equals("png") ||
+                        mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpg") ||
+                        mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpeg")) &&
+                        !flair.toUpperCase().contains("META") &&
+                        !flair.toUpperCase().contains("PSA") &&
+                        !dataObject.getString("title").toUpperCase().contains("FUCK") &&
+                        !dataObject.getString("title").toUpperCase().contains("SEX") &&
+                        !dataObject.getString("title").toUpperCase().contains("ASS") &&
+                        !dataObject.getString("title").toUpperCase().contains("COCK") &&
+                        !dataObject.getString("title").toUpperCase().contains("SHIT") &&
+                        !Boolean.parseBoolean(dataObject.getString("over_18"))
+                    ) {
                         hashMap.put("image",mURl);
                         try {
                             int len = dataObject.getJSONObject("preview")

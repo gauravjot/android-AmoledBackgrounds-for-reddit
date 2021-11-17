@@ -156,7 +156,12 @@ public class DownloadActivity extends AppCompatActivity {
         mContentView = findViewById(R.id.fullscreen_content);
 
         ImageView preview = findViewById(R.id.fullscreen_image);
-        Picasso.get().load(wallpaper.get("image")).resize(1440, 2560).centerCrop().into(preview);
+        if (!(new SharedPrefsUtils(this)).readSharedPrefsBoolean("lower_thumbnail_quality",false)) {
+            Picasso.get().load(wallpaper.get("image")).into(preview);
+        } else {
+            Picasso.get().load(wallpaper.get("preview")).into(preview);
+        }
+
 
         imageSwitcher = findViewById(R.id.download);
         imageSwitcher.setFactory(new ViewSwitcher.ViewFactory() {
@@ -333,10 +338,12 @@ public class DownloadActivity extends AppCompatActivity {
         }
     }
 
+    private long downloadID;
+    private boolean downloadStatus = true;
     public void file_download() {
         findViewById(R.id.download).setEnabled(false);
 
-        DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
+        final DownloadManager mgr = (DownloadManager) this.getSystemService(Context.DOWNLOAD_SERVICE);
 
         Uri downloadUri = Uri.parse(wallpaper.get("image"));
         DownloadManager.Request request = new DownloadManager.Request(
@@ -360,7 +367,9 @@ public class DownloadActivity extends AppCompatActivity {
             alertDialog.show();
         } catch (Exception e) {
             Toast.makeText(this, "Unable to download: " + titleStr + ext, Toast.LENGTH_LONG).show();
+            e.printStackTrace();
             findViewById(R.id.download).setEnabled(true);
+            downloadStatus = false;
         }
     }
 
@@ -370,14 +379,13 @@ public class DownloadActivity extends AppCompatActivity {
         unregisterReceiver(onDownloadComplete);
     }
 
-    private long downloadID;
-    private BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
+    private final BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             //Fetching the download id received with the broadcast
             long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
             //Checking if the received broadcast is for our enqueued download by matching download id
-            if (downloadID == id) {
+            if (downloadID == id && downloadStatus) {
                 File from = new File((new FunctionUtils()).getFilePath(getBaseContext(),titleStr + ".download"));
                 try {
                     Files.move(from.toPath(),from.toPath().resolveSibling(titleStr + ext));
@@ -397,8 +405,13 @@ public class DownloadActivity extends AppCompatActivity {
                             mvalues.put(MediaStore.Images.Media.DISPLAY_NAME, titleStr + ext);
                             mvalues.put(MediaStore.Images.Media.MIME_TYPE, "image/" + ext.replace(".",""));
                             mvalues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
-                            getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+                            Uri result = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
                             Log.d("mediastore: ","trying saving via special method on android Q or higher");
+                            if (result != null) {
+                                Log.d("mediastore: ", "successful. " + result);
+                            } else {
+                                Log.d("mediastore: ", "successful");
+                            }
                         }
                     }
                     Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();

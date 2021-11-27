@@ -32,6 +32,10 @@ public class UtilsJSON {
 
                 for (int i=0; i < jsonArray.length(); i++) {
                     JSONObject dataObject = jsonArray.getJSONObject(i).getJSONObject("data");
+                    if (!dataObject.has("preview")) {
+                        continue;
+                    }
+
                     HashMap<String, String> hashMap = new HashMap<>();
 
                     String mURl = dataObject.getString("url");
@@ -45,10 +49,6 @@ public class UtilsJSON {
                         !flair.toUpperCase().contains("META") &&
                         !flair.toUpperCase().contains("PSA") &&
                         !dataObject.getString("title").toUpperCase().contains("FUCK") &&
-                        !dataObject.getString("title").toUpperCase().contains("SEX") &&
-                        !dataObject.getString("title").toUpperCase().contains("ASS") &&
-                        !dataObject.getString("title").toUpperCase().contains("COCK") &&
-                        !dataObject.getString("title").toUpperCase().contains("SHIT") &&
                         !Boolean.parseBoolean(dataObject.getString("over_18"))
                     ) {
                         hashMap.put("image",mURl);
@@ -74,7 +74,8 @@ public class UtilsJSON {
                             }
                         } catch (Exception e) {
                             hashMap.put("preview",dataObject.getString("url"));
-                            e.printStackTrace();}
+                            e.printStackTrace();
+                        }
                         hashMap.put("flair",flair);
                         hashMap.put("title",dataObject.getString("title"));
                         hashMap.put("created_utc",dataObject.getLong("created_utc")+"");

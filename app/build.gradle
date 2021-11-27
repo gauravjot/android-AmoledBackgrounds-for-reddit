@@ -5,9 +5,9 @@ android {
     defaultConfig {
         applicationId "com.droidheat.amoledbackgrounds"
         minSdkVersion 26
-        targetSdkVersion 31
-        versionCode 24
-        versionName "1.4.0"
+        targetSdkVersion 30
+        versionCode 25
+        versionName "1.4.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

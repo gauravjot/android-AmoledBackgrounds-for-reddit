@@ -1,6 +1,7 @@
 package com.droidheat.amoledbackgrounds;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
@@ -38,8 +39,8 @@ import java.util.Objects;
 
 public class MyDownloadsAdapter extends BaseAdapter {
 
-    private Context context;
-    private ArrayList<HashMap<String, String>> arrayList;
+    private final Context context;
+    private final ArrayList<HashMap<String, String>> arrayList;
     private String currentWallpaper = "", currentlyInAsync = "";
 
     MyDownloadsAdapter(Context c) {
@@ -58,7 +59,9 @@ public class MyDownloadsAdapter extends BaseAdapter {
 
         try {
             File folder = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES); //This is just to cast to a File type since you pass it as a String
+            assert folder != null;
             File[] filesInFolder = folder.listFiles(); // This returns all the folders and files in your path
+            assert filesInFolder != null;
             for (File file : filesInFolder) { //For each of the entries do:
                 if (!file.isDirectory()) { //check that it's not a dir
                     HashMap<String, String> hashMap = new HashMap<>();
@@ -97,6 +100,7 @@ public class MyDownloadsAdapter extends BaseAdapter {
                     sortOrder
             )) {
                 // Cache column indices.
+                assert cursor != null;
                 int idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID);
                 int nameColumn =
                         cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME);
@@ -109,8 +113,6 @@ public class MyDownloadsAdapter extends BaseAdapter {
                     // Get values of columns for a given video.
                     long id = cursor.getLong(idColumn);
                     String name = cursor.getString(nameColumn);
-                    int width = cursor.getInt(durationColumn);
-                    int height = cursor.getInt(sizeColumn);
                     String path = cursor.getString(pathColumn);
 
                     Uri contentUri = ContentUris.withAppendedId(
@@ -164,6 +166,7 @@ public class MyDownloadsAdapter extends BaseAdapter {
         return 0;
     }
 
+    @SuppressLint("InflateParams")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
 
@@ -195,18 +198,15 @@ public class MyDownloadsAdapter extends BaseAdapter {
             imageView1.setVisibility(View.INVISIBLE);
         }
 
-        imageView1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!currentWallpaper.equals(arrayList.get(position).get("title"))) {
-                    progressBar.setVisibility(View.VISIBLE);
-                    imageView1.setVisibility(View.INVISIBLE);
-                    SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask();
-                    String[] strings = new String[2];
-                    strings[0] = arrayList.get(position).get("title");
-                    strings[1] = arrayList.get(position).get("path");
-                    setWallpaperAsyncTask.execute(strings);
-                }
+        imageView1.setOnClickListener(v -> {
+            if (!currentWallpaper.equals(arrayList.get(position).get("title"))) {
+                progressBar.setVisibility(View.VISIBLE);
+                imageView1.setVisibility(View.INVISIBLE);
+                SetWallpaperAsyncTask setWallpaperAsyncTask = new SetWallpaperAsyncTask();
+                String[] strings = new String[2];
+                strings[0] = arrayList.get(position).get("title");
+                strings[1] = arrayList.get(position).get("path");
+                setWallpaperAsyncTask.execute(strings);
             }
         });
 
@@ -217,73 +217,59 @@ public class MyDownloadsAdapter extends BaseAdapter {
             popupMenu.getMenu().add(0, R.id.popup_delete, 1, "Delete");
         }
 
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.popup_share:
-                        Intent shareIntent = new Intent();
-                        shareIntent.setAction(Intent.ACTION_SEND);
-                        shareIntent.setType("image/*");
-                        shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Here is a wallpaper from " + R.string.app_name);
-                        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(arrayList.get(position).get("uri")));
-                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        context.startActivity(Intent.createChooser(shareIntent, "Send to"));
-                        return true;
-                    case R.id.popup_delete:
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                        builder.setMessage("Do you want to delete " + arrayList.get(position).get("title"))
-                                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        if (Build.VERSION.SDK_INT >= 29) {
-                                            // Remove a specific media item.
-                                            ContentResolver resolver = context.getApplicationContext().getContentResolver();
-                                            Uri imageUri = Uri.parse(arrayList.get(position).get("uri"));
-                                            String selection = "";
-                                            String[] selectionArgs = new String[]{};
-                                            resolver.delete(
-                                                    imageUri,
-                                                    selection,
-                                                    selectionArgs);
-                                        } else {
-                                            File file = new File(Objects.requireNonNull(arrayList.get(position).get("path")));
-                                            if(!file.delete()) {
-                                                Toast.makeText(context,"Unable to delete wallpaper. Do it manually.",
-                                                        Toast.LENGTH_LONG).show();
-                                            }
-                                        }
-                                        refresh();
-                                    }
-                                })
-                                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        // User cancelled the dialog
-                                    }
-                                });
-                        // Create the AlertDialog object and return it
-                        builder.create();
-                        builder.show();
-                        return true;
-                    default:
-                        return false;
-                }
+        popupMenu.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.popup_share) {
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.setType("image/*");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Here is a wallpaper from " + R.string.app_name);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(arrayList.get(position).get("uri")));
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(Intent.createChooser(shareIntent, "Send to"));
+                return true;
+            } else if (itemId == R.id.popup_delete) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                builder.setMessage("Do you want to delete " + arrayList.get(position).get("title"))
+                        .setPositiveButton("Yes", (dialog, id) -> {
+                            if (Build.VERSION.SDK_INT >= 29) {
+                                // Remove a specific media item.
+                                ContentResolver resolver = context.getApplicationContext().getContentResolver();
+                                Uri imageUri = Uri.parse(arrayList.get(position).get("uri"));
+                                String selection = "";
+                                String[] selectionArgs = new String[]{};
+                                resolver.delete(
+                                        imageUri,
+                                        selection,
+                                        selectionArgs);
+                            } else {
+                                File file = new File(Objects.requireNonNull(arrayList.get(position).get("path")));
+                                if (!file.delete()) {
+                                    Toast.makeText(context, "Unable to delete wallpaper. Do it manually.",
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }
+                            refresh();
+                        })
+                        .setNegativeButton("Cancel", (dialog, id) -> {
+                            // User cancelled the dialog
+                        });
+                // Create the AlertDialog object and return it
+                builder.create();
+                builder.show();
+                return true;
             }
+            return false;
         });
 
-        options.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //popupMenu.show();
-            }
+        options.setOnClickListener(v -> {
+            //popupMenu.show();
         });
 
         options.setVisibility(View.INVISIBLE);
 
-        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
+        popupMenu.setOnDismissListener(menu -> {
 
-            }
         });
 
         return convertView;
@@ -309,7 +295,7 @@ public class MyDownloadsAdapter extends BaseAdapter {
         @Override
         protected void onPostExecute(String s) {
             currentlyInAsync = "";
-            if (s == "success") {
+            if (Objects.equals(s, "success")) {
                 Toast.makeText(context, "Wallpaper set!", Toast.LENGTH_SHORT).show();
                 currentWallpaper = title;
             } else {

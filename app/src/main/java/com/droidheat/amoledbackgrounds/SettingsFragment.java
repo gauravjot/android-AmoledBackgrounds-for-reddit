@@ -7,6 +7,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.appcompat.widget.SwitchCompat;
 import android.view.LayoutInflater;
@@ -42,32 +44,29 @@ public class SettingsFragment extends Fragment {
         // Switch Daily Wallpaper
         SwitchCompat enable = view.findViewById(R.id.ed_switch);
         enable.setChecked(new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("daily_wallpaper",false));
-        enable.setOnCheckedChangeListener(new SwitchCompat.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    (new SharedPrefsUtils(getContext()))
-                            .writeSharedPrefs("auto_sort", selectedSort);
-                    (new SharedPrefsUtils(getContext()))
-                            .writeSharedPrefs("daily_wallpaper", true);
-                    DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
-                    dailyWallpaperUtils.applyAsync(getContext());
-                    AppUtils.scheduleJob(getContext());
-                    Toast.makeText(getContext(), "Wallpaper will be set daily from tomorrow!",
-                            Toast.LENGTH_LONG).show();
-                } else {
-                    getContext().getSystemService(JobScheduler.class).cancelAll();
-                    Toast.makeText(getContext(), "Daily Wallpaper is off now!",
-                            Toast.LENGTH_LONG).show();
-                    (new SharedPrefsUtils(getActivity()))
-                            .writeSharedPrefs("daily_wallpaper", false);
-                }
+        enable.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                (new SharedPrefsUtils(getContext()))
+                        .writeSharedPrefs("auto_sort", selectedSort);
+                (new SharedPrefsUtils(getContext()))
+                        .writeSharedPrefs("daily_wallpaper", true);
+                DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
+                dailyWallpaperUtils.applyAsync(getContext());
+                AppUtils.scheduleJob(getContext());
+                Toast.makeText(getContext(), "Wallpaper will be set daily from tomorrow!",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                requireContext().getSystemService(JobScheduler.class).cancelAll();
+                Toast.makeText(getContext(), "Daily Wallpaper is off now!",
+                        Toast.LENGTH_LONG).show();
+                (new SharedPrefsUtils(getContext()))
+                        .writeSharedPrefs("daily_wallpaper", false);
             }
         });
 
         // Spinner/Choose options
         final Spinner spinner = view.findViewById(R.id.options_spinner);
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(requireContext(),
                 R.array.set_auto_sort_array, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -94,43 +93,27 @@ public class SettingsFragment extends Fragment {
         // Switch Lower Thumbnail Quality
         SwitchCompat thumb = view.findViewById(R.id.low_wallpaper_quality_switch);
         thumb.setChecked(new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("lower_thumbnail_quality",false));
-        thumb.setOnCheckedChangeListener(new SwitchCompat.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    (new SharedPrefsUtils(getContext()))
-                            .writeSharedPrefs("lower_thumbnail_quality", true);
-                } else {
-                    (new SharedPrefsUtils(getContext()))
-                            .writeSharedPrefs("lower_thumbnail_quality", false);
-                }
-            }
+        thumb.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            (new SharedPrefsUtils(getContext()))
+                    .writeSharedPrefs("lower_thumbnail_quality", isChecked);
         });
 
         // Privacy Policy
-        view.findViewById(R.id.privacy_policy).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.nzran.com/amoledbackgrounds/privacy_policy.html"));
-                startActivity(browserIntent);
-            }
+        view.findViewById(R.id.privacy_policy).setOnClickListener(view12 -> {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.nzran.com/amoledbackgrounds/privacy_policy.html"));
+            startActivity(browserIntent);
         });
 
         // Changelog
-        view.findViewById(R.id.changelog).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((new AppUtils()).changelog(getContext())).show();
-            }
-        });
+        view.findViewById(R.id.changelog).setOnClickListener(view1 -> ((new AppUtils()).changelog(getContext())).show());
 
         // Version ID
         try {
-            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            PackageInfo pInfo = requireContext().getPackageManager().getPackageInfo(requireContext().getPackageName(), 0);
             ((TextView) view.findViewById(R.id.version)).setText(pInfo.versionName);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
-            ((TextView) view.findViewById(R.id.version)).setText("version-unknown");
+            ((TextView) view.findViewById(R.id.version)).setText(R.string.version_unknown);
         }
 
         return view;
@@ -138,7 +121,7 @@ public class SettingsFragment extends Fragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
     }
 

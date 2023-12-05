@@ -26,21 +26,21 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     MenuItem prevMenuItem;
 
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+    private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    viewPager.setCurrentItem(0);
-                    return true;
-                case R.id.navigation_settings:
-                    viewPager.setCurrentItem(2);
-                    return true;
-                case R.id.navigation_notifications:
-                    viewPager.setCurrentItem(1);
-                    return true;
+            int itemId = item.getItemId();
+            if (itemId == R.id.navigation_home) {
+                viewPager.setCurrentItem(0);
+                return true;
+            } else if (itemId == R.id.navigation_settings) {
+                viewPager.setCurrentItem(2);
+                return true;
+            } else if (itemId == R.id.navigation_notifications) {
+                viewPager.setCurrentItem(1);
+                return true;
             }
             return false;
         }
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Amoled Backgrounds");
+        Objects.requireNonNull(getSupportActionBar()).setTitle("Amoled Backgrounds");
 
         try {
             SharedPreferences sharedPref = getPreferences(MODE_PRIVATE);
@@ -89,11 +89,11 @@ public class MainActivity extends AppCompatActivity {
                     navigation.getMenu().getItem(0).setChecked(false);
 
                 if (i == 2) {
-                    getSupportActionBar().setTitle("Settings");
+                    Objects.requireNonNull(getSupportActionBar()).setTitle("Settings");
                 } else if (i == 1) {
-                    getSupportActionBar().setTitle("Downloads");
+                    Objects.requireNonNull(getSupportActionBar()).setTitle("Downloads");
                 } else {
-                    getSupportActionBar().setTitle("Amoled Backgrounds");
+                    Objects.requireNonNull(getSupportActionBar()).setTitle("Amoled Backgrounds");
                 }
 
                 navigation.getMenu().getItem(i).setChecked(true);
@@ -130,6 +130,7 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu, menu);
         final SearchView searchView = (SearchView) menu.findItem(R.id.action_search).getActionView();
 
+        assert searchView != null;
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @SuppressLint("RestrictedApi")
             @Override

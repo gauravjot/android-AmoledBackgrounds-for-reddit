@@ -111,7 +111,7 @@ public class SettingsFragment extends Fragment {
         view.findViewById(R.id.privacy_policy).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.com/amoledwallpapers/privacy_policy.html"));
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://droidheat.nzran.com/amoledbackgrounds/privacy_policy.html"));
                 startActivity(browserIntent);
             }
         });

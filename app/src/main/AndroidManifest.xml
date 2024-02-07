@@ -30,12 +30,8 @@
         <service
             android:name=".DailyWallpaperService"
             android:enabled="true"
-            android:exported="false" />
-
-        <activity
-            android:name=".AutomaticWallpaperActivity"
-            android:label="Daily Wallpaper"
-            android:theme="@style/DialogTheme" />
+            android:exported="false"
+            android:foregroundServiceType="shortService" />
 
         <receiver
             android:name=".RebootBroadcastReceiver"

@@ -8,9 +8,16 @@
     tools:context=".DownloadActivity"
     android:animateLayoutChanges="true">
 
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:id="@+id/toolbar" />
+
     <!-- The primary full-screen view. This can be replaced with whatever view
-         is needed to present your content, e.g. VideoView, SurfaceView,
-         TextureView, etc. -->
+        is needed to present your content, e.g. VideoView, SurfaceView,
+        TextureView, etc. -->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -25,6 +32,7 @@
             android:scaleType="centerCrop"
             android:contentDescription="@string/fullscreen_preview" />
     </RelativeLayout>
+
 
     <!-- This FrameLayout insets its children based on system windows using
          android:fitsSystemWindows. -->
@@ -59,7 +67,7 @@
                     android:layout_alignParentTop="true"
                     android:layout_alignParentStart="true"
                     android:layout_margin="16dp"
-                    android:id="@+id/resolution"/>
+                    android:id="@+id/resolution" />
 
 
                 <TextView
@@ -80,8 +88,7 @@
                     android:textColor="@android:color/white"
                     android:textSize="13sp"
                     android:textStyle="bold"
-                    android:id="@+id/post_flair"
-                    />
+                    android:id="@+id/post_flair" />
 
                 <ImageView
                     android:layout_width="26dp"
@@ -91,9 +98,9 @@
                     android:padding="4dp"
                     android:layout_marginStart="16dp"
                     android:id="@+id/imageView1213"
-                    android:tint="@android:color/white"
+                    app:tint="@android:color/white"
                     android:layout_marginBottom="5dp"
-                    android:background="@drawable/design_black_opaque_background_radius"/>
+                    android:background="@drawable/design_black_opaque_background_radius" />
 
                 <TextView
                     android:id="@+id/score"
@@ -121,10 +128,10 @@
                     android:padding="4dp"
                     android:layout_marginStart="16dp"
                     android:id="@+id/imageView1908"
-                    android:tint="@android:color/white"
+                    app:tint="@android:color/white"
                     android:layout_marginBottom="5dp"
                     android:background="@drawable/design_black_opaque_background_radius"
-                    android:layout_toEndOf="@+id/score"/>
+                    android:layout_toEndOf="@+id/score" />
 
                 <TextView
                     android:id="@+id/comments"
@@ -145,14 +152,14 @@
                     android:textColor="@android:color/white" />
 
 
-
                 <ImageView
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:background="@drawable/design_float"
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="16dp"
-                    android:layout_marginEnd="24dp"/>
+                    android:layout_marginEnd="24dp" />
+
                 <ImageSwitcher
                     android:layout_width="48dp"
                     android:layout_height="48dp"
@@ -162,7 +169,7 @@
                     android:layout_marginEnd="24dp"
                     android:id="@+id/download"
                     android:tint="@android:color/white"
-                    android:padding="12dp"/>
+                    android:padding="12dp" />
 
                 <ProgressBar
                     android:layout_width="48dp"
@@ -172,7 +179,7 @@
                     android:layout_marginEnd="24dp"
                     android:padding="8dp"
                     android:id="@+id/progress_circular"
-                    android:layout_alignParentEnd="true"/>
+                    android:layout_alignParentEnd="true" />
 
             </RelativeLayout>
 
@@ -190,7 +197,7 @@
                 android:id="@+id/title"
                 android:layout_below="@+id/relative_options"
                 android:layout_alignParentStart="true"
-                android:textAlignment="textStart"/>
+                android:textAlignment="textStart" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -201,7 +208,7 @@
                 android:layout_marginStart="16dp"
                 android:id="@+id/author"
                 android:textSize="16sp"
-                android:layout_marginBottom="16dp"/>
+                android:layout_marginBottom="16dp" />
 
             <TextView
                 android:id="@+id/user_flair"
@@ -220,7 +227,7 @@
                 android:textAllCaps="true"
                 android:layout_marginTop="2dp"
                 android:textSize="12sp"
-                android:layout_marginEnd="140dp"/>
+                android:layout_marginEnd="140dp" />
 
             <RelativeLayout
                 android:layout_width="wrap_content"
@@ -236,6 +243,7 @@
                     android:layout_height="26dp"
                     android:layout_centerVertical="true"
                     android:background="@drawable/design_grey_background_radius">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -245,15 +253,15 @@
                         android:id="@+id/text20923"
                         android:textSize="14sp"
                         android:paddingStart="8dp"
-                        android:paddingEnd="3dp"/>
+                        android:paddingEnd="3dp" />
 
                     <ImageView
                         android:layout_width="26dp"
                         android:layout_height="26dp"
                         android:src="@drawable/ic_launch_black_24dp"
-                        android:tint="@android:color/white"
+                        app:tint="@android:color/white"
                         android:layout_toEndOf="@+id/text20923"
-                        android:padding="5dp"/>
+                        android:padding="5dp" />
                 </RelativeLayout>
 
             </RelativeLayout>
@@ -265,6 +273,7 @@
             android:layout_margin="8dp"
             android:id="@+id/commentsView"
             app:cardBackgroundColor="#181818">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -275,7 +284,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:id="@+id/webView"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -292,7 +301,7 @@
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
                         android:layout_marginEnd="4dp"
-                        android:layout_centerVertical="true"/>
+                        android:layout_centerVertical="true" />
 
                     <Button
                         android:layout_width="wrap_content"
@@ -306,8 +315,7 @@
                         android:layout_marginStart="4dp"
                         android:layout_centerVertical="true"
                         android:drawableLeft="@drawable/ic_launch_black_24dp"
-                        android:drawableTint="@android:color/white"
-                        />
+                        android:drawableTint="@android:color/white" />
 
                 </RelativeLayout>
             </LinearLayout>

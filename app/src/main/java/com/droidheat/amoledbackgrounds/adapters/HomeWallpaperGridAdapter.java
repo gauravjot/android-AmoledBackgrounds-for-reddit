@@ -95,7 +95,6 @@ public class HomeWallpaperGridAdapter extends BaseAdapter {
 		 * Loading image
 		 */
 		Picasso.get().load(wallpaper.get("preview")).resize(560, 0).into(preview);
-		Log.d("Fsa", Objects.requireNonNull(wallpaper.get("preview")));
 		
 		/*
 		 * TextViews

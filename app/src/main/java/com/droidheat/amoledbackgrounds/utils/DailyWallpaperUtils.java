@@ -7,6 +7,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -126,21 +127,27 @@ public class DailyWallpaperUtils {
 						Files.move(from.toPath(), from.toPath().resolveSibling(titleStr + ext));
 						Log.d("renaming after download: ", "success");
 						ContentValues values = new ContentValues();
-						values.put(MediaStore.MediaColumns.DATA, (new AppUtils()).getFilePath(titleStr + ext));
-						boolean successMediaStore = context.getContentResolver().update(
-										MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
-										MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;
-						if (successMediaStore) {
-							setWallpaper(context,
-											(new AppUtils()).getFilePath(titleStr + ext));
-						} else {
-							Log.d("mediastore: ", "failed");
-						}
+						values.put(MediaStore.MediaColumns.DISPLAY_NAME, titleStr + ext);
+						MediaScannerConnection.scanFile(context,
+										new String[]{new File((new AppUtils()).getFilePath(titleStr + ext)).getAbsolutePath()}, null,
+										(path, uri) -> {
+											boolean successMediaStore =
+															context.getContentResolver().update(
+																			uri,
+																			values,
+																			null,
+																			null) == 1;
+											if (successMediaStore) {
+												setWallpaper(context,
+																(new AppUtils()).getFilePath(titleStr + ext));
+											} else {
+												Log.d("media-store: ", "failed saving");
+											}
+										});
 					} catch (IOException e) {
 						Log.d("renaming after download: ", "failed");
 						e.printStackTrace();
 					}
-					//AppUtils.saveToMediaStore(context,titleStr + ext);
 				}
 			}
 		}

@@ -25,88 +25,92 @@ public class FetchUtils {
 			
 			// html is JSON
 			// Start of Organising JSON to ArrayList
-			{
-				JSONObject jsonObject = new JSONObject(html.trim());
-				JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("children");
-				
-				for (int i = 0; i < jsonArray.length(); i++) {
-					JSONObject dataObject = jsonArray.getJSONObject(i).getJSONObject("data");
-					if (!dataObject.has("preview")) {
-						continue;
-					}
-					if (dataObject.getJSONObject("preview").getJSONArray("images").getJSONObject(0)
-									.getJSONArray("resolutions").length() < 1) {
-						continue;
-					}
-					
-					HashMap<String, String> hashMap = new HashMap<>();
-					
-					String mURl = dataObject.getString("url");
-					String flair = dataObject.getString("link_flair_text");
-					
-					// Filtering out posts with images and bad flairs
-					if (
-									(mURl.substring(mURl.lastIndexOf(".") + 1).equals("png") ||
-													mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpg") ||
-													mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpeg")) &&
-													!flair.toUpperCase().contains("META") &&
-													!flair.toUpperCase().contains("PSA") &&
-													!dataObject.getString("title").toUpperCase().contains("FUCK") &&
-													!Boolean.parseBoolean(dataObject.getString("over_18"))
-					) {
-						hashMap.put("image", mURl);
-						try {
-							int len = dataObject.getJSONObject("preview")
-											.getJSONArray("images").getJSONObject(0)
-											.getJSONArray("resolutions").length();
-							if (!(new SharedPrefsUtils(context)).readSharedPrefsBoolean("lower_thumbnail_quality", false)) {
-								JSONObject previewObject = dataObject.getJSONObject("preview")
-												.getJSONArray("images").getJSONObject(0)
-												.getJSONArray("resolutions").getJSONObject(Math.max(len - 3, 0));
-								
-								hashMap.put("preview", previewObject.getString("url").replaceAll("&amp;", "&"));
-							} else {
-								int i_n = 4;
-								if (len > 4) {
-									i_n = 5;
-								}
-								
-								JSONObject previewObject = dataObject.getJSONObject("preview")
-												.getJSONArray("images").getJSONObject(0)
-												.getJSONArray("resolutions").getJSONObject(len - i_n);
-								hashMap.put("preview", previewObject.getString("url").replaceAll("&amp;", "&"));
-							}
-						} catch (Exception e) {
-							hashMap.put("preview", dataObject.getString("url"));
-							e.printStackTrace();
-						}
-						hashMap.put("flair", flair);
-						hashMap.put("title", dataObject.getString("title"));
-						hashMap.put("created_utc",
-										Long.toString(dataObject.getLong("created_utc")));
-						hashMap.put("name", dataObject.getString("name"));
-						hashMap.put("domain", dataObject.getString("domain"));
-						hashMap.put("score", dataObject.getString("score"));
-						hashMap.put("over_18", dataObject.getString("over_18"));
-						hashMap.put("author", dataObject.getString("author"));
-						hashMap.put("author_flair", dataObject.getString("author_flair_text"));
-						hashMap.put("postlink", dataObject.getString("permalink"));
-						hashMap.put("comments", dataObject.getString("num_comments"));
-						JSONObject imageObject = dataObject.getJSONObject("preview")
-										.getJSONArray("images").getJSONObject(0).getJSONObject("source");
-						hashMap.put("width", imageObject.getString("width"));
-						hashMap.put("height", imageObject.getString("height"));
-						// Adding data to arraylist
-						arrayList.add(hashMap);
-					}
+			
+			if (html == null) {
+				return arrayList;
+			}
+			
+			JSONObject jsonObject = new JSONObject(html.trim());
+			JSONArray jsonArray = jsonObject.getJSONObject("data").getJSONArray("children");
+			
+			for (int i = 0; i < jsonArray.length(); i++) {
+				JSONObject dataObject = jsonArray.getJSONObject(i).getJSONObject("data");
+				if (!dataObject.has("preview")) {
+					continue;
+				}
+				if (dataObject.getJSONObject("preview").getJSONArray("images").getJSONObject(0)
+								.getJSONArray("resolutions").length() < 1) {
+					continue;
 				}
 				
-				// When all files are done in arraylist, lets add metadata hashmap we get from reddit at last
-				// When populating UI with items we will exclude last entry or remove it which is metadata
-				HashMap<String, String> metadata = new HashMap<>();
-				metadata.put("after", jsonObject.getJSONObject("data").getString("after"));
-				arrayList.add(metadata);
+				HashMap<String, String> hashMap = new HashMap<>();
+				
+				String mURl = dataObject.getString("url");
+				String flair = dataObject.getString("link_flair_text");
+				
+				// Filtering out posts with images and bad flairs
+				if (
+								(mURl.substring(mURl.lastIndexOf(".") + 1).equals("png") ||
+												mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpg") ||
+												mURl.substring(mURl.lastIndexOf(".") + 1).equals("jpeg")) &&
+												!flair.toUpperCase().contains("META") &&
+												!flair.toUpperCase().contains("PSA") &&
+												!dataObject.getString("title").toUpperCase().contains("FUCK") &&
+												!Boolean.parseBoolean(dataObject.getString("over_18"))
+				) {
+					hashMap.put("image", mURl);
+					try {
+						int len = dataObject.getJSONObject("preview")
+										.getJSONArray("images").getJSONObject(0)
+										.getJSONArray("resolutions").length();
+						if (!(new SharedPrefsUtils(context)).readSharedPrefsBoolean("lower_thumbnail_quality", false)) {
+							JSONObject previewObject = dataObject.getJSONObject("preview")
+											.getJSONArray("images").getJSONObject(0)
+											.getJSONArray("resolutions").getJSONObject(Math.max(len - 3, 0));
+							
+							hashMap.put("preview", previewObject.getString("url").replaceAll("&amp;", "&"));
+						} else {
+							int i_n = 4;
+							if (len > 4) {
+								i_n = 5;
+							}
+							
+							JSONObject previewObject = dataObject.getJSONObject("preview")
+											.getJSONArray("images").getJSONObject(0)
+											.getJSONArray("resolutions").getJSONObject(len - i_n);
+							hashMap.put("preview", previewObject.getString("url").replaceAll("&amp;", "&"));
+						}
+					} catch (Exception e) {
+						hashMap.put("preview", dataObject.getString("url"));
+						e.printStackTrace();
+					}
+					hashMap.put("flair", flair);
+					hashMap.put("title", dataObject.getString("title"));
+					hashMap.put("created_utc",
+									Long.toString(dataObject.getLong("created_utc")));
+					hashMap.put("name", dataObject.getString("name"));
+					hashMap.put("domain", dataObject.getString("domain"));
+					hashMap.put("score", dataObject.getString("score"));
+					hashMap.put("over_18", dataObject.getString("over_18"));
+					hashMap.put("author", dataObject.getString("author"));
+					hashMap.put("author_flair", dataObject.getString("author_flair_text"));
+					hashMap.put("postlink", dataObject.getString("permalink"));
+					hashMap.put("comments", dataObject.getString("num_comments"));
+					JSONObject imageObject = dataObject.getJSONObject("preview")
+									.getJSONArray("images").getJSONObject(0).getJSONObject("source");
+					hashMap.put("width", imageObject.getString("width"));
+					hashMap.put("height", imageObject.getString("height"));
+					// Adding data to arraylist
+					arrayList.add(hashMap);
+				}
 			}
+			
+			// When all files are done in arraylist, lets add metadata hashmap we get from reddit at last
+			// When populating UI with items we will exclude last entry or remove it which is metadata
+			HashMap<String, String> metadata = new HashMap<>();
+			metadata.put("after", jsonObject.getJSONObject("data").getString("after"));
+			arrayList.add(metadata);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -147,7 +151,7 @@ public class FetchUtils {
 			hashMap.put("name", dataObject.getString("name"));
 			hashMap.put("score", dataObject.getString("score"));
 			hashMap.put("author", dataObject.getString("author"));
-			hashMap.put("author_flair", dataObject.getString("author_flair_text"));
+			hashMap.put("author_flair", dataObject.getString("author_flair_text").trim());
 			hashMap.put("comment_link", dataObject.getString("permalink"));
 			hashMap.put("body", dataObject.getString("body_html"));
 			hashMap.put("parent", Integer.toString(parent));

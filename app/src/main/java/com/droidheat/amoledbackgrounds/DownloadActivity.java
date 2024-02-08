@@ -7,12 +7,14 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -353,8 +355,8 @@ public class DownloadActivity extends AppCompatActivity {
 			
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
 			alertDialogBuilder.setCancelable(false);
-			alertDialogBuilder.setMessage(titleStr);
-			alertDialogBuilder.setTitle("Downloading");
+			alertDialogBuilder.setMessage(titleStr.split("_t3")[0].replaceAll("_", " ") + " is being downloaded...");
+			alertDialogBuilder.setTitle("Please wait");
 			alertDialog = alertDialogBuilder.create();
 			alertDialog.show();
 		} catch (Exception e) {
@@ -386,38 +388,32 @@ public class DownloadActivity extends AppCompatActivity {
 				File from = new File((new AppUtils()).getFilePath(titleStr + ".download"));
 				try {
 					Files.move(from.toPath(), from.toPath().resolveSibling(titleStr + ext));
-					Log.d("renaming after download: ", "success");
+					// Remove from MediaStore
+					removeFromMediaStore(titleStr + ".download");
+					Log.d("renaming after download: ", "success renaming");
 					ContentValues values = new ContentValues();
-					values.put(MediaStore.MediaColumns.DATA, (new AppUtils()).getFilePath(titleStr + ext));
-					boolean successMediaStore = context.getContentResolver().update(
-									MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
-									MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;
-					if (successMediaStore) {
-						Log.d("media-store: ", "success");
-					} else {
-						Log.d("media-store: ", "failed");
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-							
-							ContentValues m_values = new ContentValues();
-							m_values.put(MediaStore.Images.Media.DISPLAY_NAME, titleStr + ext);
-							m_values.put(MediaStore.Images.Media.MIME_TYPE, "image/" + ext.replace(".", ""));
-							m_values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES);
-							//TODO: Unable to insert
-							Uri result = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, m_values);
-							Log.d("media-store: ", "trying saving via special method on android Q or higher");
-							if (result != null) {
-								Log.d("media-store: ", "successful. " + result);
-							} else {
-								Log.d("media-store: ", "successful");
-							}
-						}
-					}
+					values.put(MediaStore.MediaColumns.DISPLAY_NAME, titleStr + ext);
+					MediaScannerConnection.scanFile(context,
+									new String[]{new File((new AppUtils()).getFilePath(titleStr + ext)).getAbsolutePath()}, null,
+									(path, uri) -> {
+										boolean successMediaStore =
+														context.getContentResolver().update(
+																		uri,
+																		values,
+																		null,
+																		null) == 1;
+										if (successMediaStore) {
+											Log.d("media-store: ", "success saving");
+										} else {
+											Log.d("media-store: ", "failed saving");
+										}
+									});
+					
 					Toast.makeText(DownloadActivity.this, "Download completed!", Toast.LENGTH_SHORT).show();
 					primaryActionButton.setVisibility(View.VISIBLE);
 					primaryActionButton.setImageResource(R.drawable.ic_wallpaper_black_24dp);
-					//AppUtils.saveToMediaStore(context,titleStr + ext);
 				} catch (Exception e) {
-					Log.d("renaming after download: ", "failed");
+					Log.d("renaming after download: ", "failed renaming file");
 					Toast.makeText(DownloadActivity.this, "Downloading error!", Toast.LENGTH_SHORT).show();
 					e.printStackTrace();
 				}
@@ -484,6 +480,19 @@ public class DownloadActivity extends AppCompatActivity {
 			// Schedule a runnable to display UI elements after a delay
 			mHideHandler.removeCallbacks(mHidePart2Runnable);
 			mHideHandler.postDelayed(mShowPart2Runnable, UI_ANIMATION_DELAY);
+		}
+	}
+	
+	private void removeFromMediaStore(String name) {
+		ContentResolver resolver = getContentResolver();
+		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+		int result = resolver.delete(uri, MediaStore.Images.Media.DISPLAY_NAME +
+										"=?",
+						new String[]{name});
+		if (result > 0) {
+			Log.d("MediaStore: ", "removed " + name + " from media store");
+		} else {
+			Log.d("MediaStore: ", "failed to remove " + name + " from media store");
 		}
 	}
 	

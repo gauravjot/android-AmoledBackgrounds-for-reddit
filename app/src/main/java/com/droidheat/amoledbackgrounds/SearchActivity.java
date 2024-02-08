@@ -27,6 +27,8 @@ import com.droidheat.amoledbackgrounds.adapters.HomeWallpaperGridAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class SearchActivity extends AppCompatActivity {
@@ -37,6 +39,7 @@ public class SearchActivity extends AppCompatActivity {
 	HashMap<String, String> currentMetadata;
 	int currentPage = 0;
 	ProgressBar progressBar;
+	private ExecutorService executor;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,8 +98,11 @@ public class SearchActivity extends AppCompatActivity {
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 				if (currentPage > 0 && !Objects.equals(currentMetadata.get("after"), "null")) {
 					try {
-						if (firstVisibleItem + visibleItemCount >= totalItemCount - 8) {
-							// TODO: If Executor is already fetching, cancel the previous one
+						if (firstVisibleItem + visibleItemCount >= totalItemCount - 4) {
+							// If Executor is already fetching, cancel the previous one
+							if (executor != null && !executor.isShutdown()) {
+								executor.shutdownNow();
+							}
 							// End has been reached
 							int i = currentPage * 25;
 							String value = currentQuery + "&after=" + currentMetadata.get("after") +
@@ -106,6 +112,7 @@ public class SearchActivity extends AppCompatActivity {
 						}
 					} catch (Exception e) {
 						Toast.makeText(SearchActivity.this, "wallpaper loading failed, try scrolling up and down", Toast.LENGTH_SHORT).show();
+						e.printStackTrace();
 					}
 				}
 			}
@@ -114,7 +121,8 @@ public class SearchActivity extends AppCompatActivity {
 	
 	private void fetchSearchResults(String query) {
 		Handler handler = new Handler();
-		Executors.newSingleThreadExecutor().execute(() -> {
+		executor = Executors.newSingleThreadExecutor();
+		executor.execute(() -> {
 			if (!query.split("&")[0].equals(currentQuery)) {
 				currentQuery = query.split("&")[0];
 				isNewSearch = true;

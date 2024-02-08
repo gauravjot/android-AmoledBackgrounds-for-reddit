@@ -12,12 +12,15 @@
     </style>
 
     <style name="FullscreenTheme" parent="AppTheme">
-        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle</item>
+        <item name="android:actionBarStyle">@style/FullscreenActionBarStyle
+        </item>
         <item name="android:windowActionBarOverlay">true</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowBackground">@null</item>
         <item name="metaButtonBarStyle">?android:attr/buttonBarStyle</item>
-        <item name="metaButtonBarButtonStyle">?android:attr/buttonBarButtonStyle</item>
+        <item name="metaButtonBarButtonStyle">
+            ?android:attr/buttonBarButtonStyle
+        </item>
     </style>
 
     <style name="FullscreenActionBarStyle" parent="Widget.AppCompat.ActionBar">
@@ -25,9 +28,5 @@
     </style>
 
     <!-- AutomaticWallpaperActivity -->
-    <style name="DialogTheme" parent="Theme.AppCompat.Dialog">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
 
 </resources>

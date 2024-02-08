@@ -34,6 +34,10 @@ public class FetchUtils {
 					if (!dataObject.has("preview")) {
 						continue;
 					}
+					if (dataObject.getJSONObject("preview").getJSONArray("images").getJSONObject(0)
+									.getJSONArray("resolutions").length() < 1) {
+						continue;
+					}
 					
 					HashMap<String, String> hashMap = new HashMap<>();
 					
@@ -58,7 +62,8 @@ public class FetchUtils {
 							if (!(new SharedPrefsUtils(context)).readSharedPrefsBoolean("lower_thumbnail_quality", false)) {
 								JSONObject previewObject = dataObject.getJSONObject("preview")
 												.getJSONArray("images").getJSONObject(0)
-												.getJSONArray("resolutions").getJSONObject(len - 3);
+												.getJSONArray("resolutions").getJSONObject(Math.max(len - 3, 0));
+								
 								hashMap.put("preview", previewObject.getString("url").replaceAll("&amp;", "&"));
 							} else {
 								int i_n = 4;

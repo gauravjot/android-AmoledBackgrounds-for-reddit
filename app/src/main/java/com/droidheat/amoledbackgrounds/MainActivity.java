@@ -11,15 +11,16 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.droidheat.amoledbackgrounds.adapters.HomeViewPagerAdapter;
 import com.droidheat.amoledbackgrounds.utils.AppUtils;
-import com.droidheat.amoledbackgrounds.adapters.ViewPagerAdapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -29,11 +30,11 @@ import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 	
-	private ViewPager viewPager;
+	private ViewPager2 viewPager;
 	MenuItem prevMenuItem;
 	
-	private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-					= new BottomNavigationView.OnNavigationItemSelectedListener() {
+	private final NavigationBarView.OnItemSelectedListener mOnNavigationItemSelectedListener
+					= new NavigationBarView.OnItemSelectedListener() {
 		
 		@Override
 		public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -79,38 +80,29 @@ public class MainActivity extends AppCompatActivity {
 		setupViewPager(viewPager);
 		viewPager.setOffscreenPageLimit(3);
 		final BottomNavigationView navigation = findViewById(R.id.navigation);
-		navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+		navigation.setOnItemSelectedListener(mOnNavigationItemSelectedListener);
 		
-		viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+		viewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
 			@Override
-			public void onPageScrolled(int i, float v, int i1) {
-			
-			}
-			
-			@Override
-			public void onPageSelected(int i) {
+			public void onPageSelected(int position) {
 				if (prevMenuItem != null)
 					prevMenuItem.setChecked(false);
 				else
 					navigation.getMenu().getItem(0).setChecked(false);
 				
-				if (i == 2) {
+				if (position == 2) {
 					Objects.requireNonNull(getSupportActionBar()).setTitle("Settings");
-				} else if (i == 1) {
+				} else if (position == 1) {
 					Objects.requireNonNull(getSupportActionBar()).setTitle("Downloads");
 				} else {
 					Objects.requireNonNull(getSupportActionBar()).setTitle("Amoled Backgrounds");
 				}
 				
-				navigation.getMenu().getItem(i).setChecked(true);
-				prevMenuItem = navigation.getMenu().getItem(i);
-			}
-			
-			@Override
-			public void onPageScrollStateChanged(int i) {
-			
+				navigation.getMenu().getItem(position).setChecked(true);
+				prevMenuItem = navigation.getMenu().getItem(position);
 			}
 		});
+		
 	}
 	
 	@Override
@@ -118,8 +110,10 @@ public class MainActivity extends AppCompatActivity {
 		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 	}
 	
-	private void setupViewPager(ViewPager viewPager) {
-		ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+	private void setupViewPager(ViewPager2 viewPager) {
+		HomeViewPagerAdapter adapter =
+						new HomeViewPagerAdapter(getSupportFragmentManager(),
+										getLifecycle());
 		Fragment wallpaperFragment = new WallpaperFragment();
 		Fragment settingsFragment = new SettingsFragment();
 		Fragment downloadsFragment = new DownloadsFragment();
@@ -171,10 +165,6 @@ public class MainActivity extends AppCompatActivity {
 			sendIntent.setType("text/plain");
 			startActivity(sendIntent);
 		}
-//        else if (item.getItemId() == R.id.action_auto_wallpaper) {
-//            Intent intent = new Intent(MainActivity.this,AutomaticWallpaperActivity.class);
-//            startActivity(intent);
-//        }
 		return true;
 	}
 }

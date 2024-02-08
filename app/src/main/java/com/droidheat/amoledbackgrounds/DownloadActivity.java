@@ -39,7 +39,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.droidheat.amoledbackgrounds.utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;
 import com.squareup.picasso.Picasso;
@@ -194,11 +194,11 @@ public class DownloadActivity extends AppCompatActivity {
 		
 		findViewById(R.id.imageView1908).setOnClickListener(v -> showCommentWebView());
 		
-		titleStr = (new FunctionUtils()).purifyRedditFileTitle(
+		titleStr = (new AppUtils()).purifyRedditFileTitle(
 						wallpaper.get("title"),
 						wallpaper.get("name")
 		);
-		ext = (new FunctionUtils()).purifyRedditFileExtension(wallpaper.get("image"));
+		ext = (new AppUtils()).purifyRedditFileExtension(wallpaper.get("image"));
 		
 		String post_title = Objects.requireNonNull(wallpaper.get("title"))
 						.replaceAll("\\(.*?\\) ?", "")
@@ -230,17 +230,17 @@ public class DownloadActivity extends AppCompatActivity {
 			startActivity(browserIntent);
 		});
 		
-		// See if file is already downloaded and set button action accordingly
-		String filePath = (new FunctionUtils()).getFilePath(titleStr + ext);
-		if (new File(filePath).exists()) {
-			primaryActionButton.setImageResource(R.drawable.ic_wallpaper_black_24dp);
-			primaryActionButton.setOnClickListener(v -> {
+		primaryActionButton.setOnClickListener(v -> {
+			// See if file is already downloaded and set button action accordingly
+			String filePath = (new AppUtils()).getFilePath(titleStr + ext);
+			if (new File(filePath).exists()) {
 				// Set as Wallpaper
+				primaryActionButton.setImageResource(R.drawable.ic_wallpaper_black_24dp);
 				primaryActionButton.setVisibility(View.INVISIBLE);
 				progressBar.setVisibility(View.VISIBLE);
 				Executors.newSingleThreadExecutor().execute(() -> {
 					try {
-						Boolean isSuccess = (new FunctionUtils()).changeWallpaper(
+						Boolean isSuccess = (new AppUtils()).changeWallpaper(
 										getBaseContext(),
 										filePath
 						);
@@ -260,17 +260,14 @@ public class DownloadActivity extends AppCompatActivity {
 						e.printStackTrace();
 					}
 				});
-				
-			});
-		} else {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-				registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
 			} else {
-				registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
-			}
-			
-			// Download Wallpaper
-			primaryActionButton.setOnClickListener(v -> {
+				// Download Wallpaper
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+					registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE), Context.RECEIVER_EXPORTED);
+				} else {
+					registerReceiver(onDownloadComplete, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+				}
+				
 				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 					// Download using createWriteRequest
 					file_download();
@@ -284,17 +281,15 @@ public class DownloadActivity extends AppCompatActivity {
 						file_download();
 					}
 				}
-			});
-		}
+			}
+		});
 		
 		// Load comments
 		Executors.newSingleThreadExecutor().execute(() -> {
 			try {
-				String comments = loadComments(wallpaper.get("name"));
+				String comments = loadComments(Objects.requireNonNull(wallpaper.get("name")).replace("t3_", ""));
 				
-				runOnUiThread(() -> {
-					commentsWebView.loadDataWithBaseURL(null, comments, null, "UTF-8", null);
-				});
+				runOnUiThread(() -> commentsWebView.loadDataWithBaseURL(null, comments, null, "UTF-8", null));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -373,7 +368,12 @@ public class DownloadActivity extends AppCompatActivity {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(onDownloadComplete);
+		// in case receiver is not unregistered
+		try {
+			unregisterReceiver(onDownloadComplete);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private final BroadcastReceiver onDownloadComplete = new BroadcastReceiver() {
@@ -383,12 +383,12 @@ public class DownloadActivity extends AppCompatActivity {
 			long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 			//Checking if the received broadcast is for our enqueued download by matching download id
 			if (downloadID == id && downloadStatus) {
-				File from = new File((new FunctionUtils()).getFilePath(titleStr + ".download"));
+				File from = new File((new AppUtils()).getFilePath(titleStr + ".download"));
 				try {
 					Files.move(from.toPath(), from.toPath().resolveSibling(titleStr + ext));
 					Log.d("renaming after download: ", "success");
 					ContentValues values = new ContentValues();
-					values.put(MediaStore.MediaColumns.DATA, (new FunctionUtils()).getFilePath(titleStr + ext));
+					values.put(MediaStore.MediaColumns.DATA, (new AppUtils()).getFilePath(titleStr + ext));
 					boolean successMediaStore = context.getContentResolver().update(
 									MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
 									MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;

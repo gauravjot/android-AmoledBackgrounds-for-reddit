@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#000"
     tools:context=".DownloadActivity"
     android:animateLayoutChanges="true">
-
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -186,7 +184,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Name of the image but it can be very big so I have to set max lines jsut to fit this all into this setion"
+                android:text="@string/app_name"
                 android:paddingTop="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
@@ -203,7 +201,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/title"
-                android:text="u/Gavinax"
+                android:text="@string/app_name"
                 android:maxLines="1"
                 android:layout_marginStart="16dp"
                 android:id="@+id/author"
@@ -214,7 +212,7 @@
                 android:id="@+id/user_flair"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Sample flair"
+                android:text="@string/app_name"
                 android:maxLines="1"
                 android:background="@drawable/design_user_flair"
                 android:layout_toEndOf="@+id/author"

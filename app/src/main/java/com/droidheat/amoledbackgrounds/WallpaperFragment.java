@@ -20,7 +20,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;
-import com.droidheat.amoledbackgrounds.adapters.MyGridWallpaperAdapter;
+import com.droidheat.amoledbackgrounds.adapters.HomeWallpaperGridAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,7 +30,7 @@ import java.util.concurrent.Executors;
 public class WallpaperFragment extends Fragment {
 	
 	private final HashMap<String, String> currentMetadata = new HashMap<>();
-	private MyGridWallpaperAdapter myGridWallpaperAdapter;
+	private HomeWallpaperGridAdapter homeWallpaperGridAdapter;
 	private ProgressBar progressBar;
 	private String currentSort = "hot";
 	private int currentPage = 0;
@@ -53,8 +53,8 @@ public class WallpaperFragment extends Fragment {
 		View view = inflater.inflate(R.layout.fragment_wallpaper, container, false);
 		
 		gridView = view.findViewById(R.id.gridView);
-		myGridWallpaperAdapter = new MyGridWallpaperAdapter(getActivity());
-		gridView.setAdapter(myGridWallpaperAdapter);
+		homeWallpaperGridAdapter = new HomeWallpaperGridAdapter(getActivity());
+		gridView.setAdapter(homeWallpaperGridAdapter);
 		
 		relativeLayout = view.findViewById(R.id.relative_reload);
 		relativeLayout.setVisibility(View.INVISIBLE);
@@ -153,11 +153,6 @@ public class WallpaperFragment extends Fragment {
 		super.onAttach(context);
 	}
 	
-	@Override
-	public void onDetach() {
-		super.onDetach();
-	}
-	
 	private void fetchWallpapers(String uriPath) {
 		Handler handler = new Handler();
 		Executors.newSingleThreadExecutor().execute(() -> {
@@ -175,10 +170,10 @@ public class WallpaperFragment extends Fragment {
 						currentMetadata.putAll(arrayList.get(arrayList.size() - 1));
 						arrayList.remove(arrayList.size() - 1);
 						if (isSortChanged) {
-							myGridWallpaperAdapter.removeItems();
+							homeWallpaperGridAdapter.removeItems();
 							isSortChanged = false;
 						}
-						myGridWallpaperAdapter.addItems(arrayList);
+						homeWallpaperGridAdapter.addItems(arrayList);
 						progressBar.setVisibility(View.INVISIBLE);
 						gridView.setVisibility(View.VISIBLE);
 						relativeLayout.setVisibility(View.INVISIBLE);

@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -13,7 +13,7 @@ public class RebootBroadcastReceiver extends BroadcastReceiver {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		if (Objects.equals(intent.getAction(), Intent.ACTION_BOOT_COMPLETED)) {
-			AppUtils.scheduleJob(context);
+			(new AppUtils()).scheduleJob(context);
 		}
 	}
 }

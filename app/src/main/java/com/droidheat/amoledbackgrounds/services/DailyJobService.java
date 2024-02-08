@@ -1,9 +1,8 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.services;
 
 import android.app.job.JobParameters;
 import android.app.job.JobService;
 import android.content.Intent;
-import android.os.Build;
 import android.os.StrictMode;
 
 import com.droidheat.amoledbackgrounds.utils.AppUtils;
@@ -20,15 +19,12 @@ public class DailyJobService extends JobService {
 	
 	@Override
 	public boolean onStartJob(JobParameters params) {
-		AppUtils.scheduleJob(this);
+		(new AppUtils()).scheduleJob(this);
 		
 		if ((new SharedPrefsUtils(this))
 						.readSharedPrefsBoolean("daily_wallpaper", false)) {
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				startForegroundService(new Intent(this, DailyWallpaperService.class));
-			} else {
-				startService(new Intent(this, DailyWallpaperService.class));
-			}
+			startForegroundService(new Intent(this, DailyWallpaperService.class));
+			
 		}
 		return false;
 	}

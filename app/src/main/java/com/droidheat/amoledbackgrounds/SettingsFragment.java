@@ -21,8 +21,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.DailyWallpaperUtils;
+import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;
 
 public class SettingsFragment extends Fragment {
@@ -56,7 +56,7 @@ public class SettingsFragment extends Fragment {
 								.writeSharedPrefs("daily_wallpaper", true);
 				DailyWallpaperUtils dailyWallpaperUtils = new DailyWallpaperUtils();
 				dailyWallpaperUtils.applyAsync(getContext());
-				AppUtils.scheduleJob(getContext());
+				(new AppUtils()).scheduleJob(getContext());
 				Toast.makeText(getContext(), "Wallpaper will be set daily from tomorrow!",
 								Toast.LENGTH_LONG).show();
 			} else {
@@ -97,10 +97,8 @@ public class SettingsFragment extends Fragment {
 		// Switch Lower Thumbnail Quality
 		SwitchCompat thumb = view.findViewById(R.id.low_wallpaper_quality_switch);
 		thumb.setChecked(new SharedPrefsUtils(getContext()).readSharedPrefsBoolean("lower_thumbnail_quality", false));
-		thumb.setOnCheckedChangeListener((buttonView, isChecked) -> {
-			(new SharedPrefsUtils(getContext()))
-							.writeSharedPrefs("lower_thumbnail_quality", isChecked);
-		});
+		thumb.setOnCheckedChangeListener((buttonView, isChecked) -> (new SharedPrefsUtils(getContext()))
+						.writeSharedPrefs("lower_thumbnail_quality", isChecked));
 		
 		// Privacy Policy
 		view.findViewById(R.id.privacy_policy).setOnClickListener(view12 -> {
@@ -129,8 +127,4 @@ public class SettingsFragment extends Fragment {
 		super.onAttach(context);
 	}
 	
-	@Override
-	public void onDetach() {
-		super.onDetach();
-	}
 }

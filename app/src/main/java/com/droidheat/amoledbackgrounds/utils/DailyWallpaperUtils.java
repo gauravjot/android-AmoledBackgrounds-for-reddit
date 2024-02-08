@@ -36,7 +36,7 @@ public class DailyWallpaperUtils {
 	private void setWallpaper(Context context, String filePath) {
 		Executors.newSingleThreadExecutor().execute(() -> {
 			try {
-				(new FunctionUtils()).changeWallpaper(
+				(new AppUtils()).changeWallpaper(
 								context,
 								filePath
 				);
@@ -61,14 +61,14 @@ public class DailyWallpaperUtils {
 			
 			wallpaper =
 							(new FetchUtils()).grabPostsAsArrayList(context, url.trim()).get(0);
-			String titleStr = (new FunctionUtils()).purifyRedditFileTitle(
+			String titleStr = (new AppUtils()).purifyRedditFileTitle(
 							wallpaper.get("title"),
 							wallpaper.get("name"));
 			String ext =
-							(new FunctionUtils()).purifyRedditFileExtension(wallpaper.get("image"));
+							(new AppUtils()).purifyRedditFileExtension(wallpaper.get("image"));
 			
 			
-			String filePath = (new FunctionUtils()).getFilePath(titleStr + ext);
+			String filePath = (new AppUtils()).getFilePath(titleStr + ext);
 			File file = new File(filePath);
 			if (file.exists()) {
 				setWallpaper(context, filePath);
@@ -116,23 +116,23 @@ public class DailyWallpaperUtils {
 				long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
 				if (downloadID == id) {
 					context.unregisterReceiver(this);
-					String titleStr = (new FunctionUtils()).purifyRedditFileTitle(
+					String titleStr = (new AppUtils()).purifyRedditFileTitle(
 									wallpaper.get("title"),
 									wallpaper.get("name"));
 					String ext =
-									(new FunctionUtils()).purifyRedditFileExtension(wallpaper.get("image"));
-					File from = new File((new FunctionUtils()).getFilePath(titleStr + ".download"));
+									(new AppUtils()).purifyRedditFileExtension(wallpaper.get("image"));
+					File from = new File((new AppUtils()).getFilePath(titleStr + ".download"));
 					try {
 						Files.move(from.toPath(), from.toPath().resolveSibling(titleStr + ext));
 						Log.d("renaming after download: ", "success");
 						ContentValues values = new ContentValues();
-						values.put(MediaStore.MediaColumns.DATA, (new FunctionUtils()).getFilePath(titleStr + ext));
+						values.put(MediaStore.MediaColumns.DATA, (new AppUtils()).getFilePath(titleStr + ext));
 						boolean successMediaStore = context.getContentResolver().update(
 										MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values,
 										MediaStore.MediaColumns.DATA + "='" + from.getPath() + "'", null) == 1;
 						if (successMediaStore) {
 							setWallpaper(context,
-											(new FunctionUtils()).getFilePath(titleStr + ext));
+											(new AppUtils()).getFilePath(titleStr + ext));
 						} else {
 							Log.d("mediastore: ", "failed");
 						}

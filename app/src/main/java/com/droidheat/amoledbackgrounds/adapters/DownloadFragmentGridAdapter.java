@@ -24,7 +24,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.droidheat.amoledbackgrounds.R;
-import com.droidheat.amoledbackgrounds.utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -34,13 +34,13 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 
-public class MyDownloadsAdapter extends BaseAdapter {
+public class DownloadFragmentGridAdapter extends BaseAdapter {
 	
 	private final Context context;
 	private final ArrayList<HashMap<String, String>> arrayList;
 	private String currentWallpaper = "";
 	
-	public MyDownloadsAdapter(Context c) {
+	public DownloadFragmentGridAdapter(Context c) {
 		context = c;
 		arrayList = new ArrayList<>(getItems());
 	}
@@ -191,7 +191,7 @@ public class MyDownloadsAdapter extends BaseAdapter {
 				Handler handler = new Handler();
 				Executors.newSingleThreadExecutor().execute(() -> {
 					try {
-						Boolean isSuccess = (new FunctionUtils()).changeWallpaper(
+						Boolean isSuccess = (new AppUtils()).changeWallpaper(
 										context,
 										arrayList.get(position).get("path")
 						);

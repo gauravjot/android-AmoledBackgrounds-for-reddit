@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.services;
 
 import android.annotation.SuppressLint;
 import android.app.DownloadManager;
@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.droidheat.amoledbackgrounds.utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.MainActivity;
+import com.droidheat.amoledbackgrounds.R;
+import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;
 
@@ -73,11 +75,11 @@ public class DailyWallpaperService extends Service {
 		
 		if (wallpaper != null && !wallpaper.isEmpty()) {
 			
-			titleStr = (new FunctionUtils()).purifyRedditFileTitle(
+			titleStr = (new AppUtils()).purifyRedditFileTitle(
 							wallpaper.get("title"),
 							wallpaper.get("name")
 			);
-			ext = (new FunctionUtils()).purifyRedditFileExtension(wallpaper.get("image"));
+			ext = (new AppUtils()).purifyRedditFileExtension(wallpaper.get("image"));
 			
 			item = new HashMap<>();
 			item.put("title", titleStr);
@@ -85,13 +87,13 @@ public class DailyWallpaperService extends Service {
 			
 			// If file is already downloaded before then we simply applyAsync it
 			
-			String filePath = (new FunctionUtils()).getFilePath(titleStr + ext);
+			String filePath = (new AppUtils()).getFilePath(titleStr + ext);
 			File file = new File(filePath);
 			Log.d("Location", filePath);
 			if (file.exists()) {
 				pushNotification("Setting the wallpaper...",
 								notificationManager);
-				(new FunctionUtils()).changeWallpaper(getApplicationContext(), filePath);
+				(new AppUtils()).changeWallpaper(getApplicationContext(), filePath);
 				stopForeground(true);
 				return START_NOT_STICKY;
 			}
@@ -136,45 +138,46 @@ public class DailyWallpaperService extends Service {
 		Toast.makeText(this, "Service Destroyed", Toast.LENGTH_SHORT).show();
 	}
 	
-	BroadcastReceiver setWallpaperBroadcastReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-				long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
-				if (downloadID == id) {
-					//AppUtils.saveToMediaStore(context,item.get("title") + item.get("ext"));
-					pushNotification("Setting the wallpaper...", notificationManager);
-					// Execute on a separate thread
-					Handler handler = new Handler();
-					Executors.newSingleThreadExecutor().execute(() -> {
-						try {
-							Boolean isSuccess = (new FunctionUtils()).changeWallpaper(
-											getBaseContext(),
-											(new FunctionUtils()).getFilePath(item.get("title") + item.get("ext"))
-							);
-							handler.post(() -> {
-								Runnable runnable = () -> {
-									if (isSuccess) {
-										Log.d(SERVICE_NAME, "Wallpaper is set with success.");
-										pushNotification("Daily Wallpaper is applied", notificationManager);
-									} else {
-										Log.d(SERVICE_NAME, "A failure has occurred while setting wallpaper.");
-										pushNotification("Unable to apply daily wallpaper", notificationManager);
-									}
-									context.unregisterReceiver(this);
-									stopForeground(false);
-								};
-								runnable.run();
-							});
-						} catch (Exception e) {
-							e.printStackTrace();
+	final BroadcastReceiver setWallpaperBroadcastReceiver =
+					new BroadcastReceiver() {
+						@Override
+						public void onReceive(Context context, Intent intent) {
+							String action = intent.getAction();
+							if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
+								long id = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+								if (downloadID == id) {
+									//AppUtils.saveToMediaStore(context,item.get("title") + item.get("ext"));
+									pushNotification("Setting the wallpaper...", notificationManager);
+									// Execute on a separate thread
+									Handler handler = new Handler();
+									Executors.newSingleThreadExecutor().execute(() -> {
+										try {
+											Boolean isSuccess = (new AppUtils()).changeWallpaper(
+															getBaseContext(),
+															(new AppUtils()).getFilePath(item.get("title") + item.get("ext"))
+											);
+											handler.post(() -> {
+												Runnable runnable = () -> {
+													if (isSuccess) {
+														Log.d(SERVICE_NAME, "Wallpaper is set with success.");
+														pushNotification("Daily Wallpaper is applied", notificationManager);
+													} else {
+														Log.d(SERVICE_NAME, "A failure has occurred while setting wallpaper.");
+														pushNotification("Unable to apply daily wallpaper", notificationManager);
+													}
+													context.unregisterReceiver(this);
+													stopForeground(false);
+												};
+												runnable.run();
+											});
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									});
+								}
+							}
 						}
-					});
-				}
-			}
-		}
-	};
+					};
 	
 	private void pushNotification(String message, NotificationManager notificationManager) {
 		createNotificationChannel(notificationManager);

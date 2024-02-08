@@ -1,16 +1,14 @@
 package com.droidheat.amoledbackgrounds;
 
-import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Intent;
-import android.os.AsyncTask;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
 
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,15 +22,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;
-import com.droidheat.amoledbackgrounds.adapters.MyGridWallpaperAdapter;
+import com.droidheat.amoledbackgrounds.adapters.HomeWallpaperGridAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.concurrent.Executors;
 
 public class SearchActivity extends AppCompatActivity {
 	
-	MyGridWallpaperAdapter myGridWallpaperAdapter;
+	HomeWallpaperGridAdapter homeWallpaperGridAdapter;
 	String currentQuery = "";
 	Boolean isNewSearch = true;
 	HashMap<String, String> currentMetadata;
@@ -44,7 +43,7 @@ public class SearchActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		
-		setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
+		setSupportActionBar(findViewById(R.id.toolbar));
 		Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 		getSupportActionBar().setTitle("");
 		
@@ -58,36 +57,32 @@ public class SearchActivity extends AppCompatActivity {
 		final EditText editText = findViewById(R.id.search_bar);
 		editText.setText(query);
 		getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
-		editText.setOnKeyListener(new View.OnKeyListener() {
-			@Override
-			public boolean onKey(View v, int keyCode, KeyEvent event) {
-				if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-								(keyCode == KeyEvent.KEYCODE_ENTER)) {
-					// Perform action on key press
-					doSearch(editText.getText().toString());
-					InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(editText.getWindowToken(),
-									0);
-					editText.setFocusableInTouchMode(false);
-					editText.setFocusable(false);
-					editText.setFocusableInTouchMode(true);
-					editText.setFocusable(true);
-					return true;
-				}
-				return false;
+		editText.setOnKeyListener((v, keyCode, event) -> {
+			if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+							(keyCode == KeyEvent.KEYCODE_ENTER)) {
+				// Perform action on key press
+				doSearch(editText.getText().toString());
+				InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(editText.getWindowToken(),
+								0);
+				editText.setFocusableInTouchMode(false);
+				editText.setFocusable(false);
+				editText.setFocusableInTouchMode(true);
+				editText.setFocusable(true);
+				return true;
 			}
+			return false;
 		});
 	}
 	
 	
 	private void doSearch(String query) {
-		myGridWallpaperAdapter = new MyGridWallpaperAdapter(this);
+		homeWallpaperGridAdapter = new HomeWallpaperGridAdapter(this);
 		GridView gridView = findViewById(R.id.gridView);
-		gridView.setAdapter(myGridWallpaperAdapter);
+		gridView.setAdapter(homeWallpaperGridAdapter);
 		((TextView) findViewById(R.id.text34231)).setText("Searching for '" + query + "'");
 		
-		final GrabItemsAsyncTask[] grabItemsAsyncTask = {new GrabItemsAsyncTask()};
-		grabItemsAsyncTask[0].execute(query);
+		fetchSearchResults(query);
 		progressBar.setVisibility(View.VISIBLE);
 		
 		gridView.setOnScrollListener(new AbsListView.OnScrollListener() {
@@ -101,15 +96,12 @@ public class SearchActivity extends AppCompatActivity {
 				if (currentPage > 0 && !Objects.equals(currentMetadata.get("after"), "null")) {
 					try {
 						if (firstVisibleItem + visibleItemCount >= totalItemCount - 8) {
-							if (grabItemsAsyncTask[0].getStatus().equals(AsyncTask.Status.RUNNING)) {
-								grabItemsAsyncTask[0].cancel(true);
-							}
+							// TODO: If Executor is already fetching, cancel the previous one
 							// End has been reached
 							int i = currentPage * 25;
 							String value = currentQuery + "&after=" + currentMetadata.get("after") +
 											"&count=" + i;
-							grabItemsAsyncTask[0] = new GrabItemsAsyncTask();
-							grabItemsAsyncTask[0].execute(value);
+							fetchSearchResults(value);
 							progressBar.setVisibility(View.VISIBLE);
 						}
 					} catch (Exception e) {
@@ -120,15 +112,9 @@ public class SearchActivity extends AppCompatActivity {
 		});
 	}
 	
-	@SuppressLint("StaticFieldLeak")
-	private class GrabItemsAsyncTask extends AsyncTask<String, Integer, Double> {
-		
-		private ArrayList<HashMap<String, String>> arrayList;
-		private String query;
-		
-		@Override
-		protected Double doInBackground(String... params) {
-			query = params[0];
+	private void fetchSearchResults(String query) {
+		Handler handler = new Handler();
+		Executors.newSingleThreadExecutor().execute(() -> {
 			if (!query.split("&")[0].equals(currentQuery)) {
 				currentQuery = query.split("&")[0];
 				isNewSearch = true;
@@ -136,35 +122,28 @@ public class SearchActivity extends AppCompatActivity {
 			}
 			
 			String url = "https://www.reddit.com/r/Amoledbackgrounds/search.json?q=" + query + "&restrict_sr=1";
-			arrayList = (new FetchUtils()).grabPostsAsArrayList(getBaseContext(), url.trim());
-			return null;
-		}
-		
-		@SuppressLint("SetTextI18n")
-		@Override
-		protected void onPostExecute(Double result) {
-			if (arrayList != null && !arrayList.isEmpty()) {
-				currentMetadata = arrayList.get(arrayList.size() - 1);
-				currentPage = currentPage + 1;
-				if (arrayList.size() > 1) {
-					((TextView) findViewById(R.id.text34231)).setText("Showing search results for '" + query.split("&")[0] + "'");
-				} else {
-					((TextView) findViewById(R.id.text34231)).setText("No items found for '" + query.split("&")[0] + "'");
+			ArrayList<HashMap<String, String>> arrayList =
+							(new FetchUtils()).grabPostsAsArrayList(getBaseContext(), url.trim());
+			
+			handler.post(() -> {
+				if (arrayList != null && !arrayList.isEmpty()) {
+					currentMetadata = arrayList.get(arrayList.size() - 1);
+					currentPage = currentPage + 1;
+					if (arrayList.size() > 1) {
+						((TextView) findViewById(R.id.text34231)).setText("Showing search results for '" + query.split("&")[0] + "'");
+					} else {
+						((TextView) findViewById(R.id.text34231)).setText("No items found for '" + query.split("&")[0] + "'");
+					}
+					arrayList.remove(arrayList.size() - 1);
+					if (isNewSearch) {
+						homeWallpaperGridAdapter.removeItems();
+						isNewSearch = false;
+					}
+					homeWallpaperGridAdapter.addItems(arrayList);
+					progressBar.setVisibility(View.GONE);
 				}
-				arrayList.remove(arrayList.size() - 1);
-				if (isNewSearch) {
-					myGridWallpaperAdapter.removeItems();
-					isNewSearch = false;
-				}
-				myGridWallpaperAdapter.addItems(arrayList);
-				progressBar.setVisibility(View.GONE);
-			}
-		}
-		
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			super.onProgressUpdate(values);
-		}
+			});
+		});
 	}
 	
 	@Override

@@ -28,13 +28,13 @@
         tools:targetApi="34">
 
         <service
-            android:name=".DailyWallpaperService"
+            android:name=".services.DailyWallpaperService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="shortService" />
 
         <receiver
-            android:name=".RebootBroadcastReceiver"
+            android:name=".receivers.RebootBroadcastReceiver"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
@@ -44,7 +44,7 @@
         </receiver>
 
         <service
-            android:name=".DailyJobService"
+            android:name=".services.DailyJobService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />

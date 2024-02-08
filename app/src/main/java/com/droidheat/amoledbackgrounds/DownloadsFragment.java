@@ -16,7 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.droidheat.amoledbackgrounds.adapters.MyDownloadsAdapter;
+import com.droidheat.amoledbackgrounds.adapters.DownloadFragmentGridAdapter;
 
 public class DownloadsFragment extends Fragment {
 	
@@ -54,8 +54,8 @@ public class DownloadsFragment extends Fragment {
 	}
 	
 	private void loadImages() {
-		MyDownloadsAdapter myDownloadsAdapter = new MyDownloadsAdapter(getActivity());
-		gridView.setAdapter(myDownloadsAdapter);
+		DownloadFragmentGridAdapter downloadFragmentGridAdapter = new DownloadFragmentGridAdapter(getActivity());
+		gridView.setAdapter(downloadFragmentGridAdapter);
 		permissionBtn.setVisibility(View.INVISIBLE);
 		gridView.setVisibility(View.VISIBLE);
 	}

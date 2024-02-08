@@ -19,8 +19,6 @@
 
     <string name="app_name">AmoledBackgrounds</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string-array name="options_array">
         <item>Hot</item>
         <item>New</item>
@@ -37,22 +35,15 @@
     </string-array>
 
     <string name="title_activity_download">DownloadActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
     <string name="fullscreen_preview">fullscreen preview</string>
-    <string name="reddit">reddit</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="search">Search</string>
     <string name="thread">thread</string>
 
     <string name="changelog">Changelog</string>
-    <string name="r_amoledbackgrounds">r/AmoledBackgrounds</string>
     <string name="play_store_url">https://play.google.com/store/apps/details?id=com.droidheat.amoledbackgrounds</string>
-    <string name="preference_file_key">key1</string>
     <string name="share">Share with Friends</string>
     <string name="rate_our_app_5">Rate app on Play Store</string>
-    <string name="daily_wallpaper_dialog_instructions">This feature runs daily at same time you enable this setting. It is under full testing for reliability. Please choose your preferred sort for daily wallpaper -</string>
-    <string name="automatic_wallpaper">Daily Wallpaper</string>
     <string name="settings">Settings</string>
     <string name="downloads">Downloads</string>
     <string name="version_unknown">version-unknown</string>

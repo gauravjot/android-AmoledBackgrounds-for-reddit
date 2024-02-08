@@ -5,6 +5,12 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
     <uses-permission android:name="android.permission.SET_WALLPAPER" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.SEND_DOWNLOAD_COMPLETED_INTENTS" />
@@ -22,17 +28,13 @@
         tools:targetApi="34">
 
         <service
-            android:name=".DailyWallpaperService"
+            android:name=".services.DailyWallpaperService"
             android:enabled="true"
-            android:exported="false" />
-
-        <activity
-            android:name=".AutomaticWallpaperActivity"
-            android:label="Daily Wallpaper"
-            android:theme="@style/DialogTheme" />
+            android:exported="false"
+            android:foregroundServiceType="shortService" />
 
         <receiver
-            android:name=".RebootBroadcastReceiver"
+            android:name=".receivers.RebootBroadcastReceiver"
             android:enabled="true"
             android:exported="false"
             android:permission="android.permission.RECEIVE_BOOT_COMPLETED">
@@ -42,7 +44,7 @@
         </receiver>
 
         <service
-            android:name=".DailyJobService"
+            android:name=".services.DailyJobService"
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />

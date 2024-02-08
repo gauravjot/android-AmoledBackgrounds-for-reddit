@@ -11,23 +11,22 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/colorPrimary"
-        android:id="@+id/toolbar"
-        />
+        android:id="@+id/toolbar" />
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/text2321"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_below="@+id/toolbar"/>
+        android:layout_below="@+id/toolbar" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="#11ffffff"
         android:layout_above="@+id/navigation"
-        android:id="@+id/text2321"/>
+        android:id="@+id/text2321" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
@@ -42,6 +41,6 @@
         app:itemTextColor="@drawable/navigation_selector"
         app:itemIconTint="@drawable/navigation_selector"
         app:menu="@menu/navigation"
-        app:labelVisibilityMode="unlabeled"/>
+        app:labelVisibilityMode="unlabeled" />
 
 </RelativeLayout>

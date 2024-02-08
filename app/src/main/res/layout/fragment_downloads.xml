@@ -46,14 +46,15 @@
         android:clipToPadding="false"
         android:scrollbarStyle="outsideOverlay"/>
 
+
     <Button
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:text="Storage Permission is required to access"
+        android:text="Storage Read Permission Required"
         android:layout_centerInParent="true"
         android:id="@+id/button_permission"
         android:background="@drawable/design_grey_background_radius"
         android:paddingStart="8dp"
-        android:paddingEnd="8dp"/>
+        android:paddingEnd="8dp" />
 
 </RelativeLayout>

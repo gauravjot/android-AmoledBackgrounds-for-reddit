@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="400dp"
     android:layout_margin="5dp">
@@ -21,7 +22,7 @@
             android:paddingBottom="8dp"
             android:textColor="#77ffffff"
             android:maxLines="3"
-            android:ellipsize="marquee"/>
+            android:ellipsize="marquee" />
 
         <TextView
             android:id="@+id/textView"
@@ -36,8 +37,7 @@
             android:maxLines="2"
             android:text="asdfasdsadasdasdas sadasd asd asdasd asd asdas dasdasdas"
             android:ellipsize="marquee"
-            android:textColor="@android:color/white"
-            />
+            android:textColor="@android:color/white" />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -46,13 +46,12 @@
             android:layout_above="@+id/textView"
             android:background="@drawable/design_card_background">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:layout_margin="1dp"
-            android:id="@+id/preview"
-            />
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_margin="1dp"
+                android:id="@+id/preview" />
 
             <ImageView
                 android:layout_width="26dp"
@@ -62,9 +61,9 @@
                 android:padding="6dp"
                 android:layout_marginStart="4dp"
                 android:id="@+id/imageView1213"
-                android:tint="@android:color/white"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/design_black_opaque_background_radius"/>
+                android:background="@drawable/design_black_opaque_background_radius"
+                app:tint="@android:color/white" />
 
             <TextView
                 android:id="@+id/score"
@@ -93,9 +92,9 @@
                 android:layout_marginStart="4dp"
                 android:id="@+id/imageView12135"
                 android:layout_toEndOf="@+id/score"
-                android:tint="@android:color/white"
                 android:layout_marginBottom="5dp"
-                android:background="@drawable/design_black_opaque_background_radius"/>
+                android:background="@drawable/design_black_opaque_background_radius"
+                app:tint="@android:color/white" />
 
             <TextView
                 android:id="@+id/comments"
@@ -129,8 +128,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="12sp"
                 android:textStyle="bold"
-                android:id="@+id/post_flair"
-                />
+                android:id="@+id/post_flair" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -143,7 +141,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_above="@+id/score"
                 android:layout_margin="6dp"
-                android:id="@+id/resolution"/>
+                android:id="@+id/resolution" />
 
         </RelativeLayout>
 

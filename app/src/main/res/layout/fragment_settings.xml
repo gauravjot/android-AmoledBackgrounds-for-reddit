@@ -1,174 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="16dp">
+    android:paddingTop="16dp"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/ed_switch"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Daily Wallpaper"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/text3241"
+            android:textColor="@android:color/white"
+            android:layout_toStartOf="@+id/ed_switch"
+            android:layout_alignParentStart="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sets the current trending wallpaper daily at the time you activate this feature"
+            android:layout_below="@+id/text3241"
+            android:textSize="16sp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/unselected_text"
+            android:layout_toStartOf="@+id/ed_switch"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/relative23145"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:background="@drawable/design_grey_background_radius">
 
-            <androidx.appcompat.widget.SwitchCompat
+            <Spinner
+                android:id="@+id/options_spinner"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/ed_switch"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="16dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Daily Wallpaper"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:id="@+id/text3241"
-                android:textColor="@android:color/white"
-                android:layout_toStartOf="@+id/ed_switch"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sets the current trending wallpaper daily at the time you activate this feature"
-                android:layout_below="@+id/text3241"
-                android:textSize="16sp"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/unselected_text"
-                android:layout_toStartOf="@+id/ed_switch"
-                android:layout_alignParentStart="true"/>
+                android:layout_height="36dp"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp" />
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp">
-            <RelativeLayout
-                android:id="@+id/relative23145"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:background="@drawable/design_grey_background_radius">
+            android:text="Please choose your preferred sort for daily wallpaper"
+            android:textSize="16sp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/unselected_text"
+            android:layout_toStartOf="@+id/relative23145"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
 
-                <Spinner
-                    android:id="@+id/options_spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:paddingStart="4dp"
-                    android:paddingEnd="4dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
 
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Please choose your preferred sort for daily wallpaper"
-                android:textSize="16sp"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/unselected_text"
-                android:layout_toStartOf="@+id/relative23145"
-                android:layout_alignParentStart="true"/>
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.SwitchCompat
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp">
+            android:id="@+id/low_wallpaper_quality_switch"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="16dp" />
 
-            <androidx.appcompat.widget.SwitchCompat
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/low_wallpaper_quality_switch"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="16dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Lower Thumbnail Quality"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:id="@+id/text324431"
-                android:textColor="@android:color/white"
-                android:layout_toStartOf="@+id/low_wallpaper_quality_switch"
-                android:layout_alignParentStart="true"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Decreases the thumbnail quality to save data"
-                android:layout_below="@+id/text324431"
-                android:textSize="16sp"
-                android:layout_marginTop="2dp"
-                android:textColor="@color/unselected_text"
-                android:layout_toStartOf="@+id/low_wallpaper_quality_switch"
-                android:layout_alignParentStart="true"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:id="@+id/changelog">
+            android:text="Lower Thumbnail Quality"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:id="@+id/text324431"
+            android:textColor="@android:color/white"
+            android:layout_toStartOf="@+id/low_wallpaper_quality_switch"
+            android:layout_alignParentStart="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Changelog"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_alignParentStart="true"/>
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:id="@+id/privacy_policy">
+            android:text="Decreases the thumbnail quality to save data"
+            android:layout_below="@+id/text324431"
+            android:textSize="16sp"
+            android:layout_marginTop="2dp"
+            android:textColor="@color/unselected_text"
+            android:layout_toStartOf="@+id/low_wallpaper_quality_switch"
+            android:layout_alignParentStart="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Privacy Policy"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:layout_alignParentStart="true"/>
+    </RelativeLayout>
 
-        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/changelog">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:id="@+id/versioning">
+            android:text="@string/changelog"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_alignParentStart="true" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="asfda"
-                android:textSize="18sp"
-                android:id="@+id/version"
-                android:textColor="@color/unselected_text"
-                android:layout_alignParentStart="true"/>
+    </RelativeLayout>
 
-        </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/privacy_policy">
 
-    </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/privacy_policy"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/white"
+            android:layout_alignParentStart="true" />
 
-</RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version_unknown"
+            android:textSize="18sp"
+            android:id="@+id/version"
+            android:textColor="@color/unselected_text"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

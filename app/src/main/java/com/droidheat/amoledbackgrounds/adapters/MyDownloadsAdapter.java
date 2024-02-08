@@ -24,7 +24,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 
 import com.droidheat.amoledbackgrounds.R;
-import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.FunctionUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

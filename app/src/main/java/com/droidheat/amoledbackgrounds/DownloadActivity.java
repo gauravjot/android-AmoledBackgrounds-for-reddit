@@ -39,7 +39,9 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;
+import com.droidheat.amoledbackgrounds.utils.FetchUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -489,7 +491,7 @@ public class DownloadActivity extends AppCompatActivity {
 		String url =
 						"https://www.reddit.com/r/Amoledbackgrounds/comments/" + key + "/" +
 										".json";
-		ArrayList<HashMap<String, String>> arrayList = (new UtilsJSON()).grabPostComments(url.trim());
+		ArrayList<HashMap<String, String>> arrayList = (new FetchUtils()).grabPostComments(url.trim());
 		
 		String data = null;
 		if (arrayList != null && !arrayList.isEmpty()) {

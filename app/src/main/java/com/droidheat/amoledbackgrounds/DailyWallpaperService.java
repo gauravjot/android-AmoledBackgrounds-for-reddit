@@ -20,7 +20,9 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.droidheat.amoledbackgrounds.Utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.FunctionUtils;
+import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;
+import com.droidheat.amoledbackgrounds.utils.FetchUtils;
 
 import java.io.File;
 import java.util.HashMap;
@@ -61,7 +63,7 @@ public class DailyWallpaperService extends Service {
 		String url = "https://www.reddit.com/r/amoledbackgrounds/" + sort;
 		
 		try {
-			wallpaper = (new UtilsJSON()).grabPostsAsArrayList(getBaseContext(), url.trim()).get(0);
+			wallpaper = (new FetchUtils()).grabPostsAsArrayList(getBaseContext(), url.trim()).get(0);
 		} catch (Exception e) {
 			pushNotification("Error: Unable to reach Reddit for daily wallpaper.",
 							notificationManager);

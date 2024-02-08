@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds.Utils;
+package com.droidheat.amoledbackgrounds.utils;
 
 import android.Manifest;
 import android.app.WallpaperManager;
@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
 import android.os.ParcelFileDescriptor;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -53,12 +52,11 @@ public class FunctionUtils {
 	}
 	
 	public String purifyRedditFileTitle(String rawFileTitle, String redditUniqueName) {
-		// rawFileName      = wallpaper.get("title")
-		// redditUniqueName = wallpaper.get("name")
-		
-		String titleStr = Objects.requireNonNull(rawFileTitle).replaceAll("\\(.*?\\) ?", "").replaceAll("\\[.*?\\] ?", "")
-						.replaceAll("\\{[^}]*\\}", "");
-		titleStr = titleStr.replaceAll("\\u00A0", " ").trim();
+		String titleStr = Objects.requireNonNull(rawFileTitle)
+						.replaceAll("\\(.*?\\) ?", "")
+						.replaceAll("\\[.*?\\] ?", "")
+						.replaceAll("\\{[^}]*\\}", "")
+						.replaceAll("\\u00A0", " ").trim();
 		titleStr = titleStr.replaceAll(" ", "_") + "_" + redditUniqueName;
 		titleStr = titleStr.substring(0, Math.min(titleStr.length(), 50));
 		titleStr = validFileNameConvert(titleStr);
@@ -73,8 +71,10 @@ public class FunctionUtils {
 	}
 	
 	private String validFileNameConvert(String string) {
-		String newS = string.replaceAll("[\\\\/:*?\"<>|]", "");
-		return newS.replace(".", "").replaceAll("%", "") + "_amoled_droidheat";
+		return string.replaceAll("[\\\\/:*?\"<>|]", "")
+						.replace(".", "")
+						.replaceAll("%", "")
+						+ "_amoled_droidheat";
 	}
 	
 	private Bitmap getBitmap(Context context, String pathOfNewWallpaper) {

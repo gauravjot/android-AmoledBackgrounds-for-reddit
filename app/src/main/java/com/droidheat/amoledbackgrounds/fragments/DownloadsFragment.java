@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.fragments;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -16,6 +16,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.adapters.DownloadFragmentGridAdapter;
 
 public class DownloadsFragment extends Fragment {

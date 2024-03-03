@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.activities;
 
 import android.app.SearchManager;
 import android.content.Intent;
@@ -21,13 +21,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;
 import com.droidheat.amoledbackgrounds.adapters.HomeWallpaperGridAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

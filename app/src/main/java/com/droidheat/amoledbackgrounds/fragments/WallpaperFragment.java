@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;
 import com.droidheat.amoledbackgrounds.adapters.HomeWallpaperGridAdapter;
 

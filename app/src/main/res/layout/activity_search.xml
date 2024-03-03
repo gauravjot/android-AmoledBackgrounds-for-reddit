@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SearchActivity">
+    tools:context=".activities.SearchActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:maxLines="1"
             android:inputType="text"
             android:hint="batman"
-            android:focusableInTouchMode="true"/>
+            android:focusableInTouchMode="true" />
     </androidx.appcompat.widget.Toolbar>
 
     <TextView
@@ -30,7 +30,7 @@
         android:padding="16dp"
         android:textSize="16sp"
         android:textColor="@color/unselected_text"
-        android:id="@+id/text34231"/>
+        android:id="@+id/text34231" />
 
     <GridView
         android:layout_width="match_parent"
@@ -45,7 +45,7 @@
         android:paddingEnd="10dp"
         android:paddingBottom="16dp"
         android:scrollbarStyle="outsideOverlay"
-        android:verticalSpacing="24dp"/>
+        android:verticalSpacing="24dp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -55,6 +55,6 @@
         android:layout_alignParentEnd="true"
         android:layout_below="@+id/toolbar"
         android:layout_marginEnd="16dp"
-        android:padding="8dp"/>
+        android:padding="8dp" />
 
 </RelativeLayout>

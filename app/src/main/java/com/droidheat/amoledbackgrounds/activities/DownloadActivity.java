@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.activities;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -41,6 +41,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;
 import com.droidheat.amoledbackgrounds.utils.FetchUtils;

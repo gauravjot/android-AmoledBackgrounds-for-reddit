@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.fragments;
 
 import android.app.job.JobScheduler;
 import android.content.Context;
@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.utils.DailyWallpaperUtils;
 import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;

@@ -1,4 +1,4 @@
-package com.droidheat.amoledbackgrounds;
+package com.droidheat.amoledbackgrounds.activities;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -11,7 +11,11 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
+import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.adapters.HomeViewPagerAdapter;
+import com.droidheat.amoledbackgrounds.fragments.DownloadsFragment;
+import com.droidheat.amoledbackgrounds.fragments.SettingsFragment;
+import com.droidheat.amoledbackgrounds.fragments.WallpaperFragment;
 import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;

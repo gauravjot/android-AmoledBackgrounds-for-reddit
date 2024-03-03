@@ -50,7 +50,7 @@
             android:permission="android.permission.BIND_JOB_SERVICE" />
 
         <activity
-            android:name=".SearchActivity"
+            android:name=".activities.SearchActivity"
             android:label="Search Wallpapers"
             android:screenOrientation="portrait"
             android:exported="false"
@@ -65,13 +65,13 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".DownloadActivity"
+            android:name=".activities.DownloadActivity"
             android:label="@string/title_activity_download"
             android:screenOrientation="portrait"
             android:theme="@style/FullscreenTheme"
             tools:ignore="LockedOrientationActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activities.MainActivity"
             android:screenOrientation="portrait"
             android:exported="true"
             tools:ignore="LockedOrientationActivity">

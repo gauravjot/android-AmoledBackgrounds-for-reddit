@@ -20,7 +20,7 @@ import android.widget.Toast;
 
 import androidx.core.app.NotificationCompat;
 
-import com.droidheat.amoledbackgrounds.MainActivity;
+import com.droidheat.amoledbackgrounds.activities.MainActivity;
 import com.droidheat.amoledbackgrounds.R;
 import com.droidheat.amoledbackgrounds.utils.AppUtils;
 import com.droidheat.amoledbackgrounds.utils.SharedPrefsUtils;

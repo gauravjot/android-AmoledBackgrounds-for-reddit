@@ -1,3 +1,7 @@
+# Archived
+
+This repository is archived. For latest version of this app, please see https://github.com/gauravjot/amoledbackgrounds-app
+
 # AmoledBackgrounds for Android
 
 AmoledBackgrounds provide an easy and quick way for users to get wallpapers from r/AmoledBackgrounds subreddit on popular Reddit platform.
